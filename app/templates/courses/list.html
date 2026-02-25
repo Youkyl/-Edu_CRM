@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Liste des Cours{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center;">
+    <h1>Gestion des Cours</h1>
+    <a href="{{ url_for('courses.create') }}" class="btn btn-primary">Ajouter un Cours</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titre</th>
+            <th>Enseignant</th>
+            <th>Nombre d'étudiants</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in courses %}
+        <tr>
+            <td>{{ course.id }}</td>
+            <td>{{ course.title }}</td>
+            <td>{{ course.teacher_name }}</td>
+            <td>{{ course.student_ids | length }}</td>
+            <td>
+                <form action="{{ url_for('courses.delete', id=course.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Supprimer ce cours ?')">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="text-align: center;">Aucun cours trouvé.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
