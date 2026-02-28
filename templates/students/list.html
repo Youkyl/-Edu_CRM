@@ -1,0 +1,84 @@
+<!-- app/templates/students/list.html -->
+
+<!-- On hérite de base.html — on récupère navbar, style, flash messages -->
+{% extends "base.html" %}
+
+<!-- On définit le titre de cette page -->
+{% block title %}Liste des Étudiants — Edu.CRM{% endblock %}
+
+<!-- On remplit le bloc content de base.html -->
+{% block content %}
+<div class="container mt-4">
+  <!-- En-tête avec titre et bouton Ajouter -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="h4 mb-0">
+      Étudiants
+      <span class="badge text-bg-secondary">{{ students|length }}</span>
+    </h2>
+    <!-- url_for génère /students/create automatiquement -->
+    {% if role == 'admin' %}
+    <a href="{{ url_for('students.create_student') }}" class="btn btn-primary">Ajouter un étudiant</a>
+    {% endif %}
+  </div>
+
+  {% if role == 'teacher' %}
+  <p class="text-body-secondary">Affichage des étudiants inscrits dans vos cours.</p>
+  {% endif %}
+
+  <!-- Si la liste est vide -->
+  {% if not students %}
+  <div class="alert alert-info">
+    Aucun étudiant enregistré.
+    <a href="{{ url_for('students.create_student') }}">Ajouter le premier ?</a>
+  </div>
+
+  <!-- Sinon on affiche le tableau -->
+  {% else %}
+  <div class="table-wrap">
+  <table class="table table-hover table-bordered mb-0">
+    <thead>
+      <tr>
+        <th>#ID</th>
+        <th>Nom</th>
+        <th>Email</th>
+        <th>Âge</th>
+        {% if role == 'admin' %}
+        <th>Action</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Boucle Jinja2 : on parcourt la liste envoyée par la route -->
+      {% for student in students %}
+      <tr>
+        <td>{{ student.id }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.email }}</td>
+        <td>{{ student.age }} ans</td>
+        {% if role == 'admin' %}
+        <td>
+          <!--
+                            Formulaire POST pour supprimer
+                            On n'utilise PAS un lien <a href> car :
+                            - Un lien = GET = dangereux pour une suppression
+                            - Un formulaire POST = intentionnel et sécurisé
+                        -->
+          <form
+            action="{{ url_for('students.delete_student', student_id=student.id) }}"
+            method="POST"
+            onsubmit="return confirm('Supprimer {{ student.name }} ?')"
+          >
+            <button type="submit" class="btn btn-danger btn-sm">
+               Supprimer
+            </button>
+          </form>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
