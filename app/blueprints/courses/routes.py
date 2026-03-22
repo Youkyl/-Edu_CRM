@@ -7,6 +7,12 @@ def list_courses():
     courses = course_service.list_courses()
     return render_template('list.html', courses=courses)
 
+@courses_bp.route('/search')
+def search():
+    query = request.args.get('q', '')
+    courses = course_service.search_courses(query)
+    return render_template('courses/_rows.html', courses=courses)
+
 @courses_bp.route('/create', methods=['GET', 'POST'])
 def create():
     if request.method == 'POST':

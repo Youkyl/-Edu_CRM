@@ -14,6 +14,9 @@ def add_course(course_id, title, teacher_id):
     """Adds a new course to the in-memory list."""
     if any(c['id'] == course_id for c in courses):
         return False, "Course ID already exists."
+        
+    if any(c['title'].lower() == title.lower() for c in courses):
+        return False, "Course title already exists."
     
     new_course = {
         'id': course_id,
@@ -26,7 +29,6 @@ def add_course(course_id, title, teacher_id):
 
 def delete_course(course_id):
     """Deletes a course by ID."""
-    global courses
     initial_len = len(courses)
     courses[:] = [c for c in courses if str(c['id']) != str(course_id)]
     return len(courses) < initial_len
@@ -46,3 +48,7 @@ def assign_student_to_course(course_id, student_id):
 def get_course_by_id(course_id):
     """Returns a specific course by ID."""
     return next((c for c in courses if str(c['id']) == str(course_id)), None)
+
+def search_courses(query):
+    query = query.lower()
+    return [c for c in list_courses() if query in c['title'].lower() or query in c.get('teacher_name', '').lower()]

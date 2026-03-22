@@ -3,10 +3,13 @@
 {% block title %}Liste des Cours{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <h1>Gestion des Cours</h1>
     <a href="{{ url_for('courses.create') }}" class="btn btn-primary">Ajouter un Cours</a>
 </div>
+
+<input type="text" id="searchInput" placeholder="Rechercher un cours..." class="form-control"
+    style="margin-bottom: 20px; width: 100%; padding: 8px;">
 
 <table>
     <thead>
@@ -18,24 +21,19 @@
             <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
-        {% for course in courses %}
-        <tr>
-            <td>{{ course.id }}</td>
-            <td>{{ course.title }}</td>
-            <td>{{ course.teacher_name }}</td>
-            <td>{{ course.student_ids | length }}</td>
-            <td>
-                <form action="{{ url_for('courses.delete', id=course.id) }}" method="POST" style="display:inline;">
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Supprimer ce cours ?')">Supprimer</button>
-                </form>
-            </td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="5" style="text-align: center;">Aucun cours trouvé.</td>
-        </tr>
-        {% endfor %}
+    <tbody id="coursesTableBody">
+        {% include 'courses/_rows.html' %}
     </tbody>
 </table>
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const query = this.value;
+        fetch(`{{ url_for('courses.search') }}?q=${encodeURIComponent(query)}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('coursesTableBody').innerHTML = html;
+            });
+    });
+</script>
 {% endblock %}
