@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter un Cours{% endblock %}
+
+{% block content %}
+<h1>Ajouter un nouveau cours</h1>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="id">ID du cours (ex: C001)</label>
+        <input type="text" name="id" id="id" required placeholder="C001">
+    </div>
+    <div class="form-group">
+        <label for="title">Titre du cours</label>
+        <input type="text" name="title" id="title" required placeholder="Algorithmique">
+    </div>
+    <div class="form-group">
+        <label for="teacher_id">ID de l'enseignant (Optionnel pour le test)</label>
+        <input type="text" name="teacher_id" id="teacher_id" placeholder="T001">
+    </div>
+
+    <div style="margin-top: 1rem;">
+        <button type="submit" class="btn btn-primary">Créer le cours</button>
+        <a href="{{ url_for('courses.list_courses') }}" style="margin-left: 1rem;">Annuler</a>
+    </div>
+</form>
+{% endblock %}
