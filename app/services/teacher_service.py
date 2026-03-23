@@ -45,15 +45,3 @@ def delete_teacher(teacher_id: int) -> bool:
     return False
 
 
-def update_teacher(teacher_id: int, name: str | None = None,
-                   email: str | None = None, speciality: str | None = None) -> dict | None:
-    teacher = get_teacher_by_id(teacher_id)
-    if not teacher:
-        return None
-    if name is not None:
-        teacher["name"] = name
-    if email is not None:
-        teacher["email"] = email
-    if speciality is not None:
-        teacher["speciality"] = speciality
-    return teacher
