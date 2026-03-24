@@ -72,6 +72,9 @@
                Supprimer
             </button>
           </form>
+          <a href="{{ url_for('students.update_student', student_id=student.id) }}" class="btn btn-warning btn-sm mt-1">
+            ✏️ Modifier
+          </a>
         </td>
         {% endif %}
       </tr>

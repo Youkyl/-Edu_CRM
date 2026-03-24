@@ -83,7 +83,6 @@ def delete_student(student_id):
     if session.get("role") != "admin":
         return redirect(url_for("dashboard.index"))
 
-    # On vérifie que l'étudiant existe avant de supprimer
     student = student_service.get_student_by_id(student_id)
 
     if student is None:
@@ -93,6 +92,40 @@ def delete_student(student_id):
         flash(f"Étudiant '{student['name']}' supprimé.", "success")
 
     return redirect(url_for("students.list_students"))
+
+
+@students_bp.route("/update/<int:student_id>", methods=["GET", "POST"])
+@login_required
+def update_student(student_id):
+    if session.get("role") != "admin":
+        return redirect(url_for("dashboard.index"))
+
+    student = student_service.get_student_by_id(student_id)
+    if student is None:
+        flash(f"Étudiant introuvable (ID: {student_id}).", "warning")
+        return redirect(url_for("students.list_students"))
+
+    if request.method == "POST":
+        name  = request.form.get("name",  "").strip()
+        email = request.form.get("email", "").strip()
+        age   = request.form.get("age",   "").strip()
+
+        if not name or not email or not age:
+            flash("Tous les champs sont obligatoires.", "danger")
+            return render_template("students/edit.html", student=student)
+
+        if not age.isdigit():
+            flash("L'âge doit être un nombre entier.", "danger")
+            return render_template("students/edit.html", student=student)
+
+        updated = student_service.update_student(student_id, name=name, email=email, age=age)
+        if updated:
+            flash(f"Étudiant '{updated['name']}' mis à jour avec succès.", "success")
+        else:
+            flash("Erreur lors de la mise à jour.", "danger")
+        return redirect(url_for("students.list_students"))
+
+    return render_template("students/edit.html", student=student)
 
 # ------------------------------------------------
 # ROUTE 4 : /students/<id>

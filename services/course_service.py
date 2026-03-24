@@ -100,3 +100,31 @@ def get_teachers_for_student(student_id):
 def get_course_by_id(course_id):
     """Returns a specific course by ID."""
     return next((c for c in courses if str(c['id']) == str(course_id)), None)
+
+
+def update_course(course_id, title=None, teacher_id=None):
+    """
+    Met à jour le titre et/ou l'enseignant d'un cours existant.
+    Seuls les champs fournis (non None) sont modifiés.
+
+    Retourne :
+        (True,  cours)    → mise à jour réussie
+        (False, message)  → cours introuvable ou teacher_id invalide
+    """
+    course = get_course_by_id(course_id)
+    if not course:
+        return False, "Cours introuvable."
+    if title is not None and title.strip():
+        course['title'] = title.strip()
+    if teacher_id is not None:
+        if teacher_id == "" or teacher_id is None:
+            course['teacher_id'] = None
+        elif str(teacher_id).isdigit():
+            tid = int(teacher_id)
+            teacher = next((t for t in teachers if t['id'] == tid), None)
+            if not teacher:
+                return False, "Enseignant introuvable."
+            course['teacher_id'] = tid
+        else:
+            return False, "L'ID de l'enseignant doit être numérique."
+    return True, course
