@@ -37,6 +37,8 @@ def create():
     if session.get("role") != "admin":
         return redirect(url_for('dashboard.index'))
 
+    teachers = teacher_service.list_teachers()
+
     if request.method == 'POST':
         course_id = request.form.get('id')
         title = request.form.get('title')
@@ -53,7 +55,7 @@ def create():
         else:
             flash(message, "error")
             
-    return render_template('courses/create.html')
+    return render_template('courses/create.html', teachers=teachers)
 
 @courses_bp.route('/delete/<id>', methods=['POST'])
 def delete(id):
@@ -112,3 +114,34 @@ def export_courses():
     response.headers["Content-Type"] = "text/csv; charset=utf-8"
     response.headers["Content-Disposition"] = "attachment; filename=courses.csv"
     return response
+
+
+@courses_bp.route('/update/<course_id>', methods=['GET', 'POST'])
+def update_course(course_id):
+    if session.get("role") != "admin":
+        return redirect(url_for('dashboard.index'))
+
+    course = course_service.get_course_by_id(course_id)
+    if not course:
+        flash("Cours introuvable.", "danger")
+        return redirect(url_for('courses.list_courses'))
+
+    all_teachers = teacher_service.list_teachers()
+
+    if request.method == 'POST':
+        title      = request.form.get('title', '').strip()
+        teacher_id = request.form.get('teacher_id', '').strip()
+
+        if not title:
+            flash("Le titre est obligatoire.", "danger")
+            return render_template('courses/edit.html', course=course, teachers=all_teachers)
+
+        success, result = course_service.update_course(course_id, title=title, teacher_id=teacher_id or None)
+        if success:
+            flash(f"Cours '{result['title']}' mis à jour avec succès.", "success")
+            return redirect(url_for('courses.list_courses'))
+        else:
+            flash(result, "danger")
+            return render_template('courses/edit.html', course=course, teachers=all_teachers)
+
+    return render_template('courses/edit.html', course=course, teachers=all_teachers)

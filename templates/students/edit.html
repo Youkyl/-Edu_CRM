@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Modifier un Étudiant — Edu.CRM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4">✏️ Modifier un étudiant</h2>
+
+      <form method="POST" action="{{ url_for('students.update_student', student_id=student.id) }}">
+        <div class="mb-3">
+          <label for="name" class="form-label fw-bold">Nom complet</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            name="name"
+            value="{{ student.name }}"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label fw-bold">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            value="{{ student.email }}"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="age" class="form-label fw-bold">Âge</label>
+          <input
+            type="number"
+            class="form-control"
+            id="age"
+            name="age"
+            min="1"
+            max="99"
+            value="{{ student.age }}"
+            required
+          />
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-warning">💾 Enregistrer les modifications</button>
+          <a href="{{ url_for('students.list_students') }}" class="btn btn-secondary">← Annuler</a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

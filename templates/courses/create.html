@@ -1,8 +1,13 @@
 {% extends "base.html" %}
+<<<<<<< HEAD
+=======
+{% from "macros/_ui.html" import form_input, form_select %}
+>>>>>>> develop
 
 {% block title %}Ajouter un Cours{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <h1>Ajouter un nouveau cours</h1>
 
 <form method="POST">
@@ -24,4 +29,21 @@
         <a href="{{ url_for('courses.list_courses') }}" style="margin-left: 1rem;">Annuler</a>
     </div>
 </form>
+=======
+<div class="max-w-2xl mx-auto bg-white shadow-sm rounded-3 p-4 border border-slate-200">
+    <h1 class="h3 mb-1 text-slate-900">Ajouter un nouveau cours</h1>
+    <p class="text-body-secondary mb-4">Créez un cours et associez directement un enseignant si nécessaire.</p>
+
+    <form method="POST">
+        {{ form_input('id', 'ID du cours', placeholder='C001', required=True) }}
+        {{ form_input('title', 'Titre du cours', placeholder='Algorithmique', required=True) }}
+        {{ form_select('teacher_id', 'Enseignant', teachers, placeholder='Aucun enseignant pour le moment') }}
+
+        <div class="mt-4 d-flex align-items-center gap-3">
+            <button type="submit" class="btn btn-primary">Créer le cours</button>
+            <a href="{{ url_for('courses.list_courses') }}" class="btn btn-link p-0">Annuler</a>
+        </div>
+    </form>
+</div>
+>>>>>>> develop
 {% endblock %}
