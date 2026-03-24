@@ -1,4 +1,4 @@
-{% macro form_input(name, label, type='text', placeholder='', value='') -%}
+{% macro form_input(name, label, type='text', placeholder='', value='', required=False, min=None, max=None) -%}
 <div class="mb-3">
 	<label for="{{ name }}" class="form-label">{{ label }}</label>
 	<input
@@ -8,6 +8,21 @@
 		name="{{ name }}"
 		placeholder="{{ placeholder }}"
 		value="{{ value }}"
+		{% if min is not none %}min="{{ min }}"{% endif %}
+		{% if max is not none %}max="{{ max }}"{% endif %}
+		{% if required %}required{% endif %}
 	/>
+</div>
+{%- endmacro %}
+
+{% macro form_select(name, label, options, placeholder='Sélectionner', value='', required=False) -%}
+<div class="mb-3">
+	<label for="{{ name }}" class="form-label">{{ label }}</label>
+	<select class="form-select" id="{{ name }}" name="{{ name }}" {% if required %}required{% endif %}>
+		<option value="">{{ placeholder }}</option>
+		{% for option in options %}
+		<option value="{{ option.id }}" {% if value and option.id == value %}selected{% endif %}>{{ option.name }}</option>
+		{% endfor %}
+	</select>
 </div>
 {%- endmacro %}

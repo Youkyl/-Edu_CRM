@@ -33,7 +33,7 @@ def get_student_by_id(student_id):
     return next((s for s in students if s["id"] == student_id), None)
 
 
-def add_student(name, email, age):
+def add_student(name, email, age, password):
     """
     Crée un nouvel étudiant et l'ajoute à la liste.
 
@@ -51,6 +51,7 @@ def add_student(name, email, age):
         "name":  name,
         "email": email,
         "age":   int(age),  # On force la conversion en entier
+        "password": password,
     }
 
     students.append(new_student)

@@ -3,24 +3,37 @@
 {% block title %}Liste des Cours{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h4 mb-0">
-        {% if role == 'student' %}
-        Mes cours
-        {% elif role == 'teacher' %}
-        Mes cours enseignés
-        {% else %}
-        Gestion des Cours
+<div class="rounded-4 border border-sky-200 bg-sky-600 text-white p-4 shadow-sm mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <h1 class="h4 mb-0 fw-bold">
+            {% if role == 'student' %}
+            Mes cours
+            {% elif role == 'teacher' %}
+            Mes cours enseignés
+            {% else %}
+            Gestion des Cours
+            {% endif %}
+        </h1>
+        {% if role == 'admin' %}
+        <a href="{{ url_for('courses.create') }}" class="btn btn-light text-sky-700 fw-semibold border-0">Ajouter un Cours</a>
         {% endif %}
-    </h1>
-    {% if role == 'admin' %}
-    <a href="{{ url_for('courses.create') }}" class="btn btn-primary">Ajouter un Cours</a>
-    {% endif %}
+    </div>
 </div>
 
-<div class="table-wrap">
-    <table class="table mb-0">
-        <thead>
+<div class="mb-3">
+    <input
+        type="text"
+        class="form-control form-control-lg border-sky-200"
+        placeholder="Rechercher un cours, un enseignant, un ID..."
+        data-table-search="courses-table-body"
+    />
+</div>
+
+<p class="text-danger small" data-search-empty="courses-table-body" hidden>Aucun résultat pour cette recherche.</p>
+
+<div class="table-wrap shadow-sm border-sky-100">
+    <table class="table mb-0 table-hover">
+        <thead class="bg-sky-50">
             <tr>
                 <th>ID</th>
                 <th>Titre</th>
@@ -31,9 +44,9 @@
                 {% endif %}
             </tr>
         </thead>
-        <tbody>
+        <tbody id="courses-table-body">
             {% for course in courses %}
-            <tr>
+            <tr data-search-row>
                 <td>{{ course.id }}</td>
                 <td>{{ course.title }}</td>
                 <td>{{ course.teacher_name }}</td>
@@ -71,7 +84,7 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="{% if role == 'admin' %}5{% else %}4{% endif %}" class="text-center">Aucun cours trouvé.</td>
+                <td colspan="{% if role == 'admin' %}5{% else %}4{% endif %}" class="text-center text-body-secondary">Aucun cours trouvé.</td>
             </tr>
             {% endfor %}
         </tbody>

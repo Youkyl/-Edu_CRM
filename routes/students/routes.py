@@ -47,9 +47,10 @@ def create_student():
         name  = request.form.get("name",  "").strip()
         email = request.form.get("email", "").strip()
         age   = request.form.get("age",   "").strip()
+        password = request.form.get("password", "").strip()
 
         # --- Validation ---
-        if not name or not email or not age:
+        if not name or not email or not age or not password:
             flash("Tous les champs sont obligatoires.", "danger")
             return render_template("students/create.html")
 
@@ -57,8 +58,12 @@ def create_student():
             flash("L'âge doit être un nombre entier.", "danger")
             return render_template("students/create.html")
 
+        if len(password) < 4:
+            flash("Le mot de passe étudiant doit contenir au moins 4 caractères.", "danger")
+            return render_template("students/create.html")
+
         # --- On appelle le service pour créer l'étudiant ---
-        student_service.add_student(name, email, age)
+        student_service.add_student(name, email, age, password)
 
         # flash() envoie un message qui survive à la redirection
         flash(f"Étudiant '{name}' ajouté avec succès !", "success")
@@ -83,6 +88,7 @@ def delete_student(student_id):
     if session.get("role") != "admin":
         return redirect(url_for("dashboard.index"))
 
+    # On vérifie que l'étudiant existe avant de supprimer
     student = student_service.get_student_by_id(student_id)
 
     if student is None:
