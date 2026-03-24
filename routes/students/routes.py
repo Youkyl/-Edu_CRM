@@ -4,25 +4,19 @@
 # Gère toutes les routes liées aux étudiants
 # ================================================
 
-from flask import Blueprint, render_template, request, redirect, session, url_for, flash
+from flask import render_template, request, redirect, session, url_for, flash
+from . import students_bp
+from ..auth.decorators import login_required
 from ...services import student_service
+from ...services import teacher_service
 from ...services import course_service
-
-# ------------------------------------------------
-# Création du Blueprint
-#
-# "students"        → nom du blueprint, utilisé dans url_for("students.xxx")
-# __name__          → dit à Flask où trouver les templates
-# url_prefix        → toutes les routes commencent par /students
-# ------------------------------------------------
-students_bp = Blueprint("students", __name__, url_prefix="/students")
-
 
 # ------------------------------------------------
 # ROUTE 1 : /students/
 # Affiche la liste de tous les étudiants
 # ------------------------------------------------
 @students_bp.route("/")
+@login_required
 def list_students():
     role = session.get("role")
 
@@ -43,6 +37,7 @@ def list_students():
 # POST → reçoit les données et crée l'étudiant
 # ------------------------------------------------
 @students_bp.route("/create", methods=["GET", "POST"])
+@login_required
 def create_student():
     if session.get("role") != "admin":
         return redirect(url_for("dashboard.index"))
@@ -88,6 +83,7 @@ def create_student():
 # <int:student_id> → Flask convertit l'URL en entier automatiquement
 # ------------------------------------------------
 @students_bp.route("/delete/<int:student_id>", methods=["POST"])
+@login_required
 def delete_student(student_id):
     if session.get("role") != "admin":
         return redirect(url_for("dashboard.index"))
@@ -102,3 +98,66 @@ def delete_student(student_id):
         flash(f"Étudiant '{student['name']}' supprimé.", "success")
 
     return redirect(url_for("students.list_students"))
+
+
+@students_bp.route("/update/<int:student_id>", methods=["GET", "POST"])
+@login_required
+def update_student(student_id):
+    if session.get("role") != "admin":
+        return redirect(url_for("dashboard.index"))
+
+    student = student_service.get_student_by_id(student_id)
+    if student is None:
+        flash(f"Étudiant introuvable (ID: {student_id}).", "warning")
+        return redirect(url_for("students.list_students"))
+
+    if request.method == "POST":
+        name  = request.form.get("name",  "").strip()
+        email = request.form.get("email", "").strip()
+        age   = request.form.get("age",   "").strip()
+
+        if not name or not email or not age:
+            flash("Tous les champs sont obligatoires.", "danger")
+            return render_template("students/edit.html", student=student)
+
+        if not age.isdigit():
+            flash("L'âge doit être un nombre entier.", "danger")
+            return render_template("students/edit.html", student=student)
+
+        updated = student_service.update_student(student_id, name=name, email=email, age=age)
+        if updated:
+            flash(f"Étudiant '{updated['name']}' mis à jour avec succès.", "success")
+        else:
+            flash("Erreur lors de la mise à jour.", "danger")
+        return redirect(url_for("students.list_students"))
+
+    return render_template("students/edit.html", student=student)
+
+# ------------------------------------------------
+# ROUTE 4 : /students/<id>
+#
+# GET  → affiche les informations de l'étudiant
+# <int:student_id> → Flask convertit l'URL en entier automatiquement
+# ------------------------------------------------
+@students_bp.route("/<int:student_id>", methods = ["GET"])
+@login_required
+def personal_infos(student_id):
+    
+    role = session.get("role")
+    
+    if role == "student" and session.get("student_id") != student_id :
+        
+        return redirect(url_for("dashboard.index"))
+        
+    # On vérifie que l'étudiant existe 
+    student = student_service.get_student_by_id(student_id)
+    
+    if student is None:
+        flash(f"Étudiant introuvable (ID: {student_id}).", "warning")
+        
+        return redirect(url_for("students.list_students"))
+    
+    list_courses = course_service.list_courses(student_id=student_id)
+    list_teachers = course_service.get_teachers_for_student(student_id=student_id)
+    
+    return render_template("students/info.html",student=student, list_courses=list_courses, list_teachers=list_teachers)

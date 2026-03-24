@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for, flash
+from flask import render_template, request, redirect, session, url_for, flash
+from . import teachers_bp
 from ...services import teacher_service
 
-teachers_bp = Blueprint("teachers", __name__, url_prefix="/teachers")
 
 @teachers_bp.route("/")
 def list_teachers():

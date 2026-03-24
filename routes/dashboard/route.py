@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import render_template, session, redirect, url_for
+from . import dashboard_bp
 from ...services.student_service import list_students
 from ...services.teacher_service import list_teachers
 from ...services.course_service import list_courses, get_students_for_teacher, get_teachers_for_student
@@ -43,5 +44,5 @@ def index():
         nb_students=len(list_students()),
         nb_teachers=len(list_teachers()),
         nb_courses=len(list_courses()),
-        role=role,
+        role=role
     )

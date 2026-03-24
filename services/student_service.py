@@ -60,6 +60,27 @@ def add_student(name, email, age, password):
     return new_student
 
 
+def update_student(student_id, name=None, email=None, age=None):
+    """
+    Met à jour les champs d'un étudiant existant.
+    Seuls les champs fournis (non None) sont modifiés.
+
+    Retourne :
+        dict  → l'étudiant mis à jour
+        None  → étudiant introuvable
+    """
+    student = get_student_by_id(student_id)
+    if student is None:
+        return None
+    if name is not None:
+        student["name"] = name
+    if email is not None:
+        student["email"] = email
+    if age is not None:
+        student["age"] = int(age)
+    return student
+
+
 def delete_student(student_id):
     """
     Supprime l'étudiant qui a cet ID.

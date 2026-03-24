@@ -1,17 +1,14 @@
 from flask import render_template, request, session, redirect, url_for, flash
+from ...data import students, teachers
 from . import auth_bp
-from ...data import students
 
 # Base de données d'exemple
 USERS = {
-    'prof': {'password': '1234', 'role': 'teacher', 'teacher_id': 1},
-    'admin': {'password': '1234', 'role': 'admin'}
+    'etudiant': {'password': '1234', 'role': 'student'},
+    'prof': {'password': '1234', 'role': 'teacher'},
+    'admin': {'password': '1234', 'role': 'admin'},
 }
 
-
-def find_student_by_name(name):
-    normalized_name = name.strip().lower()
-    return next((s for s in students if s['name'].strip().lower() == normalized_name), None)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -21,37 +18,37 @@ def login():
     POST: traite la soumission
     """
     if request.method == 'POST':
-        username = request.form.get('username', '').strip()
-        password = request.form.get('password', '').strip()
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        # Comptes fixes admin/prof
-        if username in USERS and USERS[username]['password'] == password:
-            user = USERS[username]
-            session['user_id'] = username
-            session['role'] = user['role']
-            session['student_id'] = user.get('student_id')
-            session['teacher_id'] = user.get('teacher_id')
-            flash(f'Bienvenue {username}!', 'success')
-
-            if user['role'] == 'admin':
-                return redirect(url_for('dashboard.index'))
-
-            if user['role'] == 'teacher':
-                return redirect(url_for('courses.list_courses'))
-
-            return redirect(url_for('courses.list_courses'))
-
-        # Compte étudiant basé sur son nom + mot de passe personnel
-        student = find_student_by_name(username)
-        if student and student.get('password') == password:
-            session['user_id'] = student['name']
-            session['role'] = 'student'
-            session['student_id'] = student['id']
-            session['teacher_id'] = None
-            flash(f"Bienvenue {student['name']}!", 'success')
-            return redirect(url_for('courses.list_courses'))
+        # Rechercher un utilisateur dans les listes étudiants/professeurs via email
+        student_match = next((s for s in students if s.get('email') == username), None)
+        teacher_match = next((t for t in teachers if t.get('email') == username), None)
         
-        flash('Identifiants invalides. Utilisez admin/1234, prof/1234, ou nom étudiant + son mot de passe.', 'danger')
+        # Valider les identifiants
+        if (
+            (username in USERS and USERS[username]['password'] == password)
+            or (student_match and student_match.get('password') == password)
+            or (teacher_match and teacher_match.get('password') == password)
+        ):
+            # Créer la session
+            session["user_id"] = username
+            session.pop("student_id", None)
+            session.pop("teacher_id", None)
+
+            if username in USERS:
+                session["role"] = USERS[username]["role"]
+            elif student_match:
+                session["role"] = "student"
+                session["student_id"] = student_match["id"]
+            elif teacher_match:
+                session["role"] = "teacher"
+                session["teacher_id"] = teacher_match["id"]
+                
+            flash(f'Bienvenue {username}!', 'success')
+            return redirect(url_for('dashboard.index'))
+        else:
+            flash('Identifiants invalides. Essayez avec etudiant/1234, prof/1234 ou admin/1234', 'danger')
     
     return render_template('auth/login.html')
 
@@ -66,14 +63,13 @@ def logout():
     flash(f'Au revoir {username}! Vous avez été déconnecté.', 'info')
     return redirect(url_for('auth.login'))
 
-@auth_bp.route('/dashboard')
-def dashboard():
-    """
-    Route legacy conservée pour compatibilité.
-    Redirige vers le dashboard principal qui adapte l'affichage au rôle.
-    """
-    if 'user_id' not in session:
-        flash('Veuillez vous connecter.', 'warning')
-        return redirect(url_for('auth.login'))
-
-    return redirect(url_for('dashboard.index'))
+# @auth_bp.route('/dashboard')
+# def dashboard():
+#     """
+#     Tableau de bord utilisateur (exemple protégé).
+#     """
+#     if 'user_id' not in session:
+#         flash('Veuillez vous connecter.', 'warning')
+#         return redirect(url_for('auth.login'))
+    
+#     return render_template('auth/dashboard.html', user=session.get('user_id'), role=session.get('role'))

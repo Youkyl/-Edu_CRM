@@ -44,6 +44,12 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{{ url_for('courses.list_courses') }}">Mes Cours</a>
 					</li>
+        				{% if session.get("student_id") %}
+				<li class="nav-item">
+					<a class="nav-link"
+						href="{{ url_for('students.personal_infos', student_id=session.get('student_id')) }}">Mon profil</a>
+				</li>
+				{% endif %}
 				{% endif %}
 				{% if session.get('user_id') %}
 					<li class="nav-item">
