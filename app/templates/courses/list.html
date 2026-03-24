@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Liste des Cours{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1>Gestion des Cours</h1>
+    <a href="{{ url_for('courses.create') }}" class="btn btn-primary">Ajouter un Cours</a>
+</div>
+
+<input type="text" id="searchInput" placeholder="Rechercher un cours..." class="form-control"
+    style="margin-bottom: 20px; width: 100%; padding: 8px;">
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Titre</th>
+            <th>Enseignant</th>
+            <th>Nombre d'étudiants</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="coursesTableBody">
+        {% include 'courses/_rows.html' %}
+    </tbody>
+</table>
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const query = this.value;
+        fetch(`{{ url_for('courses.search') }}?q=${encodeURIComponent(query)}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('coursesTableBody').innerHTML = html;
+            });
+    });
+</script>
+{% endblock %}
