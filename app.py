@@ -11,7 +11,7 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "dev-secret-key"
 
-    app.register_blueprint(dashboard_bp, url_prefix="/dashboard")
+    app.register_blueprint(dashboard_bp, url_prefix="/")
     app.register_blueprint(students_bp)
     app.register_blueprint(teachers_bp)
     app.register_blueprint(courses_bp)
@@ -26,8 +26,6 @@ def create_app():
             return None
 
         if request.endpoint.startswith("auth."):
-            if request.endpoint == "auth.login" and session.get("user_id"):
-                return redirect(url_for("dashboard.index"))
             return None
 
         if not session.get("user_id"):
@@ -69,12 +67,6 @@ def create_app():
             return None
 
         return None
-
-    @app.route("/")
-    def home():
-        if not session.get("user_id"):
-            return redirect(url_for("auth.login"))
-        return redirect(url_for("dashboard.index"))
 
     return app
 

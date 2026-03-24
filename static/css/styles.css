@@ -1,6 +1,6 @@
 body {
     min-height: 100vh;
-    background: linear-gradient(180deg, var(--bs-body-bg) 0%, var(--bs-light) 100%);
+    background: var(--bs-light);
 }
 
 .navbar {

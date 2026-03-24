@@ -33,6 +33,8 @@ def create():
     if session.get("role") != "admin":
         return redirect(url_for('dashboard.index'))
 
+    teachers = teacher_service.list_teachers()
+
     if request.method == 'POST':
         course_id = request.form.get('id')
         title = request.form.get('title')
@@ -49,7 +51,7 @@ def create():
         else:
             flash(message, "error")
             
-    return render_template('courses/create.html')
+    return render_template('courses/create.html', teachers=teachers)
 
 @courses_bp.route('/delete/<id>', methods=['POST'])
 def delete(id):

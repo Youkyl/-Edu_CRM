@@ -9,34 +9,48 @@
 <!-- On remplit le bloc content de base.html -->
 {% block content %}
 <div class="container mt-4">
-  <!-- En-tête avec titre et bouton Ajouter -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="h4 mb-0">
-      Étudiants
-      <span class="badge text-bg-secondary">{{ students|length }}</span>
-    </h2>
-    <!-- url_for génère /students/create automatiquement -->
-    {% if role == 'admin' %}
-    <a href="{{ url_for('students.create_student') }}" class="btn btn-primary">Ajouter un étudiant</a>
-    {% endif %}
+  <div class="rounded-4 border border-indigo-200 bg-indigo-600 text-white p-4 shadow-sm mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <h2 class="h4 mb-0 fw-bold">
+        Étudiants
+        <span class="badge text-bg-light text-indigo-700">{{ students|length }}</span>
+      </h2>
+      {% if role == 'admin' %}
+      <a href="{{ url_for('students.create_student') }}" class="btn btn-light text-indigo-700 fw-semibold border-0">Ajouter un étudiant</a>
+      {% endif %}
+    </div>
   </div>
 
   {% if role == 'teacher' %}
   <p class="text-body-secondary">Affichage des étudiants inscrits dans vos cours.</p>
   {% endif %}
 
+  {% if students %}
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control form-control-lg border-indigo-200"
+      placeholder="Rechercher un étudiant, email, âge..."
+      data-table-search="students-table-body"
+    />
+  </div>
+  <p class="text-danger small" data-search-empty="students-table-body" hidden>Aucun résultat pour cette recherche.</p>
+  {% endif %}
+
   <!-- Si la liste est vide -->
   {% if not students %}
   <div class="alert alert-info">
     Aucun étudiant enregistré.
+    {% if role == 'admin' %}
     <a href="{{ url_for('students.create_student') }}">Ajouter le premier ?</a>
+    {% endif %}
   </div>
 
   <!-- Sinon on affiche le tableau -->
   {% else %}
-  <div class="table-wrap">
+  <div class="table-wrap shadow-sm border-indigo-100">
   <table class="table table-hover table-bordered mb-0">
-    <thead>
+    <thead class="bg-indigo-50">
       <tr>
         <th>#ID</th>
         <th>Nom</th>
@@ -47,10 +61,10 @@
         {% endif %}
       </tr>
     </thead>
-    <tbody>
+    <tbody id="students-table-body">
       <!-- Boucle Jinja2 : on parcourt la liste envoyée par la route -->
       {% for student in students %}
-      <tr>
+      <tr data-search-row>
         <td>{{ student.id }}</td>
         <td>{{ student.name }}</td>
         <td>{{ student.email }}</td>
