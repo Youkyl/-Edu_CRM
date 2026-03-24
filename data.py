@@ -1,5 +1,4 @@
-# In-memory storage for the application
-# These lists store dictionaries representing students, teachers, and courses.
+
 
 students = [
 	{"id": 1, "name": "Alice Dupont", "email": "alice@edu.com", "age": 20, "password": "alice123"},
@@ -32,3 +31,19 @@ courses = [
 	{"id": "C007", "title": "Probabilités", "teacher_id": 5, "student_ids": [5, 7, 9]},
 	{"id": "C008", "title": "Cybersécurité", "teacher_id": 4, "student_ids": [3, 4, 8, 10]},
 ]
+
+
+def add_student_to_data(name, email, age, password):
+	"""Ajoute un étudiant à la liste students et retourne l'objet créé."""
+	next_id = max([s["id"] for s in students], default=0) + 1
+
+	new_student = {
+		"id": next_id,
+		"name": name.strip(),
+		"email": email.strip(),
+		"age": int(age),
+		"password": password,
+	}
+
+	students.append(new_student)
+	return new_student

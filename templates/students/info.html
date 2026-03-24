@@ -33,6 +33,11 @@
           <p class="text-slate-600">Âge</p>
           <p class="font-semibold text-slate-900">{{ student.age }} ans</p>
         </div>
+          <div>
+            <a href="{{ url_for('students.update_student', student_id=student.id) }}" class="inline-block bg-amber-500 text-white px-3 py-1.5 rounded-lg hover:bg-amber-600 transition text-xs font-semibold">
+            Modifier
+            </a>
+          </div>
       </div>
     </div>
   </div>

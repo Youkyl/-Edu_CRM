@@ -5,10 +5,7 @@
 # Il manipule uniquement les données
 # ================================================
 
-from ..data import courses, students
-
-# Compteur pour générer les IDs automatiquement (comme AUTO_INCREMENT en SQL)
-_next_id = max([s["id"] for s in students], default=0) + 1
+from ..data import add_student_to_data, courses, students
 
 import re
 
@@ -42,8 +39,6 @@ def add_student(name, email, age, password):
     """
     Crée un nouvel étudiant et l'ajoute à la liste.
     """
-    global _next_id
-    
     # --- VALIDATION ---
     if not name or not email or not age or not password:
         raise ValueError("Tous les champs sont obligatoires")
@@ -68,20 +63,7 @@ def add_student(name, email, age, password):
     
     # Vérifier doublon
 
-    # Créer
-    new_student = {
-        "id":    _next_id,
-        "name":  name.strip(),
-        "email": email.strip(),
-        "age":   age,
-        "password": password
-    }
-    
-    students.append(new_student)
-    _next_id += 1
-
-    return new_student
-
+    return add_student_to_data(name=name, email=email, age=age, password=password)
 
 def update_student(student_id, name=None, email=None, age=None):
     """
