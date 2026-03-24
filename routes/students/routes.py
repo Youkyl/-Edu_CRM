@@ -4,12 +4,18 @@
 # Gère toutes les routes liées aux étudiants
 # ================================================
 
-from flask import render_template, request, redirect, session, url_for, flash
+
+from flask import render_template, request, redirect, session, url_for, flash,make_response
+import csv
+import io
 from . import students_bp
 from ..auth.decorators import login_required
 from ...services import student_service
 from ...services import teacher_service
 from ...services import course_service
+from ...data import students
+
+
 
 # ------------------------------------------------
 # ROUTE 1 : /students/
@@ -58,6 +64,11 @@ def create_student():
             flash("L'âge doit être un nombre entier.", "danger")
             return render_template("students/create.html")
 
+        for student in students:
+            if student["email"] == email:
+                flash(f"L'étudiant avec l'email {email} existe déjà.", "danger")
+                return render_template("students/create.html")
+            
         if len(password) < 4:
             flash("Le mot de passe étudiant doit contenir au moins 4 caractères.", "danger")
             return render_template("students/create.html")
@@ -74,7 +85,6 @@ def create_student():
 
     # GET : on affiche juste le formulaire vide
     return render_template("students/create.html")
-
 
 # ------------------------------------------------
 # ROUTE 3 : /students/delete/<id>
@@ -161,3 +171,29 @@ def personal_infos(student_id):
     list_teachers = course_service.get_teachers_for_student(student_id=student_id)
     
     return render_template("students/info.html",student=student, list_courses=list_courses, list_teachers=list_teachers)
+
+
+@students_bp.route("/export")
+@login_required
+def export_students():
+    if session.get("role") != "admin":
+        return redirect(url_for("dashboard.index"))
+
+    all_students = student_service.list_students()
+
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=["id", "name", "email", "age"])
+    writer.writeheader()
+    for student in all_students:
+        writer.writerow({
+            "id":    student["id"],
+            "name":  student["name"],
+            "email": student["email"],
+            "age":   student["age"],
+        })
+
+    response = make_response(output.getvalue())
+    response.headers["Content-Type"] = "text/csv; charset=utf-8"
+    response.headers["Content-Disposition"] = "attachment; filename=students.csv"
+    return response
+

@@ -1,4 +1,8 @@
-from flask import render_template, request, redirect, session, url_for, flash
+from flask import render_template, request, redirect, session, url_for, flash, make_response
+from ..auth.decorators import login_required
+import csv
+import io
+
 from . import courses_bp
 from ...services import course_service
 from ...services import student_service
@@ -85,6 +89,31 @@ def assign_teacher(course_id):
     success, message = course_service.assign_teacher_to_course(course_id, teacher_id)
     flash(message, 'success' if success else 'danger')
     return redirect(url_for('courses.list_courses'))
+
+
+@courses_bp.route("/export")
+@login_required
+def export_courses():
+    if session.get("role") != "admin":
+        return redirect(url_for("dashboard.index"))
+
+    all_courses = course_service.list_courses()
+
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=["id", "title", "teacher_id", "student_ids"])
+    writer.writeheader()
+    for course in all_courses:
+        writer.writerow({
+            "id":          course["id"],
+            "title":       course["title"],
+            "teacher_id":  course["teacher_id"],
+            "student_ids": ";".join(str(sid) for sid in course["student_ids"]),
+        })
+
+    response = make_response(output.getvalue())
+    response.headers["Content-Type"] = "text/csv; charset=utf-8"
+    response.headers["Content-Disposition"] = "attachment; filename=courses.csv"
+    return response
 
 
 @courses_bp.route('/update/<course_id>', methods=['GET', 'POST'])

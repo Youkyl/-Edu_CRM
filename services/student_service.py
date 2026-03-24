@@ -10,6 +10,11 @@ from ..data import courses, students
 # Compteur pour générer les IDs automatiquement (comme AUTO_INCREMENT en SQL)
 _next_id = max([s["id"] for s in students], default=0) + 1
 
+import re
+
+def is_valid_email(email: str) -> bool:
+    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    return bool(re.match(pattern, email))
 
 def list_students():
     """
@@ -33,29 +38,46 @@ def get_student_by_id(student_id):
     return next((s for s in students if s["id"] == student_id), None)
 
 
-def add_student(name, email, age, password):
+def add_student(name, email, age):
     """
     Crée un nouvel étudiant et l'ajoute à la liste.
-
-    Paramètres :
-        name  (str) : Nom complet
-        email (str) : Adresse email
-        age   (int) : Âge
-
-    Retourne le dictionnaire du nouvel étudiant créé.
     """
-    global _next_id  # On modifie la variable globale
+    global _next_id
+    
+    # --- VALIDATION ---
+    if not name or not email or not age:
+        raise ValueError("Tous les champs sont obligatoires")
+    
+    if not isinstance(age, (int, str)) or (isinstance(age, str) and not age.strip()):
+        raise ValueError("L'âge doit être un nombre valide")
+    
+    try:
+        age = int(age)
+        if age < 0 or age > 120:
+            raise ValueError("L'âge doit être entre 0 et 120")
+    except ValueError:
+        raise ValueError("L'âge doit être un nombre entier valide")
+    
+    # Validation email simple
+    # if "@" not in email or "." not in email:
+    #     raise ValueError("Email invalide")
+    
+    # verification rebuste
+    if not is_valid_email(email):
+        raise ValueError("Email invalide")
+    
+    # Vérifier doublon
 
+    # Créer
     new_student = {
         "id":    _next_id,
-        "name":  name,
-        "email": email,
-        "age":   int(age),  # On force la conversion en entier
-        "password": password,
+        "name":  name.strip(),
+        "email": email.strip(),
+        "age":   age,
     }
-
+    
     students.append(new_student)
-    _next_id += 1  # On prépare l'ID pour le prochain étudiant
+    _next_id += 1
 
     return new_student
 

@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+# -Edu_CRM
+=======
 # Edu_CRM
 
 Mini application Flask de gestion académique (étudiants, enseignants, cours, tableau de bord, authentification simple).
@@ -19,3 +22,4 @@ Puis ouvrir : `http://127.0.0.1:5000`
 - `etudiant / 1234`
 - `prof / 1234`
 - `admin / 1234`
+>>>>>>> develop
