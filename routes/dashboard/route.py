@@ -1,5 +1,6 @@
 from flask import render_template, session, redirect, url_for
 from . import dashboard_bp
+from ...services import log_service
 from ...services.student_service import list_students
 from ...services.teacher_service import list_teachers
 from ...services.course_service import list_courses, get_students_for_teacher, get_teachers_for_student
@@ -16,6 +17,8 @@ def index():
         return redirect(url_for("auth.login"))
 
     role = session.get("role")
+    
+    all_logs = log_service.get_logs()
 
     if role == "teacher":
         teacher_id = session.get("teacher_id")
@@ -26,6 +29,8 @@ def index():
             nb_teachers=1,
             nb_courses=len(teacher_courses),
             role=role,
+            
+            logs=all_logs
         )
 
     if role == "student":
@@ -37,11 +42,14 @@ def index():
             nb_teachers=len(get_teachers_for_student(student_id)),
             nb_courses=len(student_courses),
             role=role,
+            
+            logs=all_logs
         )
 
     return render_template('dashboard/index.html',
         nb_students=len(list_students()),
         nb_teachers=len(list_teachers()),
         nb_courses=len(list_courses()),
-        role=role
+        role=role,
+        logs=all_logs
     )
