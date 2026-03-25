@@ -5,6 +5,7 @@ from .routes.courses import courses_bp
 from .routes.students import students_bp
 from .routes.teachers import teachers_bp
 from .routes.dashboard import dashboard_bp
+from .routes.logs import logs_bp
 
 
 def create_app():
@@ -17,6 +18,7 @@ def create_app():
     app.register_blueprint(teachers_bp)
     app.register_blueprint(courses_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(logs_bp, url_prefix="/logs")
 
     @app.before_request
     def require_login():

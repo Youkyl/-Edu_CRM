@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
 	<div class="container">
 		<a class="navbar-brand fw-semibold" href="{{ url_for('dashboard.index') }}">Edu.CRM</a>
@@ -24,7 +23,6 @@
 				</li>
 				{% endif %}
 				{% if session.get("role") == "student" and session.get("student_id") %}
-=======
 <nav class="navbar navbar-expand-lg border-bottom bg-white/90 backdrop-blur">
 	<div class="container">
 		{% set role = session.get('role') %}
@@ -72,13 +70,11 @@
 						<a class="nav-link" href="{{ url_for('courses.list_courses') }}">Mes Cours</a>
 					</li>
         				{% if session.get("student_id") %}
->>>>>>> develop
 				<li class="nav-item">
 					<a class="nav-link"
 						href="{{ url_for('students.personal_infos', student_id=session.get('student_id')) }}">Mon profil</a>
 				</li>
 				{% endif %}
-<<<<<<< HEAD
 				<li class="nav-item">
 					<a class="nav-link" href="{{ url_for('courses.list_courses') }}">Cours</a>
 				</li>
@@ -90,7 +86,6 @@
 				<li class="nav-item">
 					<a class="btn btn-sm btn-outline-danger" href="{{ url_for('auth.logout') }}">Déconnexion</a>
 				</li>
-=======
 				{% endif %}
 				{% if session.get('user_id') %}
 					<li class="nav-item">
@@ -99,13 +94,8 @@
 					<li class="nav-item">
 						<a class="btn btn-sm btn-outline-danger" href="{{ url_for('auth.logout') }}">Déconnexion</a>
 					</li>
->>>>>>> develop
 				{% endif %}
 			</ul>
 		</div>
 	</div>
-<<<<<<< HEAD
 </nav>
-=======
-</nav>
->>>>>>> develop

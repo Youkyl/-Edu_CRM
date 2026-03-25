@@ -2,7 +2,6 @@
 # These lists store dictionaries representing students, teachers, and courses.
 
 students = [
-<<<<<<< HEAD
 	{"id": 1, "name": "Alice Dupont", "email": "alice@edu.com", 'password': '1234', "age": 20},
 	{"id": 2, "name": "Bob Martin", "email": "bob@edu.com", 'password': '1234', "age": 22},
 ]
@@ -15,7 +14,6 @@ teachers = [
 courses = [
 	{"id": "C001", "title": "Algorithmique", "teacher_id": 1, "student_ids": [1, 2]},
 	{"id": "C002", "title": "Mécanique", "teacher_id": 2, "student_ids": [2]},
-=======
 	{"id": 1, "name": "Alice Dupont", "email": "alice@edu.com", "age": 20, "password": "alice123"},
 	{"id": 2, "name": "Bob Martin", "email": "bob@edu.com", "age": 22, "password": "bob123"},
 	{"id": 3, "name": "Chloe Bernard", "email": "chloe@edu.com", "age": 19, "password": "chloe123"},
@@ -45,5 +43,4 @@ courses = [
 	{"id": "C006", "title": "Base de Données", "teacher_id": 3, "student_ids": [1, 2, 6, 9]},
 	{"id": "C007", "title": "Probabilités", "teacher_id": 5, "student_ids": [5, 7, 9]},
 	{"id": "C008", "title": "Cybersécurité", "teacher_id": 4, "student_ids": [3, 4, 8, 10]},
->>>>>>> develop
 ]

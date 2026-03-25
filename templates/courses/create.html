@@ -1,13 +1,9 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
-=======
 {% from "macros/_ui.html" import form_input, form_select %}
->>>>>>> develop
 
 {% block title %}Ajouter un Cours{% endblock %}
 
 {% block content %}
-<<<<<<< HEAD
 <h1>Ajouter un nouveau cours</h1>
 
 <form method="POST">
@@ -29,7 +25,6 @@
         <a href="{{ url_for('courses.list_courses') }}" style="margin-left: 1rem;">Annuler</a>
     </div>
 </form>
-=======
 <div class="max-w-2xl mx-auto bg-white shadow-sm rounded-3 p-4 border border-slate-200">
     <h1 class="h3 mb-1 text-slate-900">Ajouter un nouveau cours</h1>
     <p class="text-body-secondary mb-4">Créez un cours et associez directement un enseignant si nécessaire.</p>
@@ -45,5 +40,5 @@
         </div>
     </form>
 </div>
->>>>>>> develop
+
 {% endblock %}

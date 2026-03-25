@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-from flask import render_template, session
-=======
 from flask import render_template, session, redirect, url_for
->>>>>>> develop
 from . import dashboard_bp
 from ...services.student_service import list_students
 from ...services.teacher_service import list_teachers
 from ...services.course_service import list_courses, get_students_for_teacher, get_teachers_for_student
 
-<<<<<<< HEAD
-
-@dashboard_bp.route("/")
-def index():
-=======
 dashboard_bp = Blueprint('dashboard', __name__)
 
 @dashboard_bp.route('/')
@@ -25,7 +16,6 @@ def index():
     if not session.get("user_id"):
         return redirect(url_for("auth.login"))
 
->>>>>>> develop
     role = session.get("role")
 
     if role == "teacher":

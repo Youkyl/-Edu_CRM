@@ -99,9 +99,6 @@ def get_teachers_for_student(student_id):
 
 def get_course_by_id(course_id):
     """Returns a specific course by ID."""
-<<<<<<< HEAD
-    return next((c for c in courses if str(c['id']) == str(course_id)), None)
-=======
     return next((c for c in courses if str(c['id']) == str(course_id)), None)
 
 
@@ -131,4 +128,3 @@ def update_course(course_id, title=None, teacher_id=None):
         else:
             return False, "L'ID de l'enseignant doit être numérique."
     return True, course
->>>>>>> develop

@@ -86,6 +86,7 @@ def create_student():
     # GET : on affiche juste le formulaire vide
     return render_template("students/create.html")
 
+
 # ------------------------------------------------
 # ROUTE 3 : /students/delete/<id>
 #

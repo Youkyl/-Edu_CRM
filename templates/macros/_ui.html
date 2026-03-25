@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-{% macro form_input(name, label, type='text', placeholder='', value='') -%}
-=======
 {% macro form_input(name, label, type='text', placeholder='', value='', required=False, min=None, max=None) -%}
->>>>>>> develop
 <div class="mb-3">
 	<label for="{{ name }}" class="form-label">{{ label }}</label>
 	<input
@@ -12,11 +8,6 @@
 		name="{{ name }}"
 		placeholder="{{ placeholder }}"
 		value="{{ value }}"
-<<<<<<< HEAD
-	/>
-</div>
-{%- endmacro %}
-=======
 		{% if min is not none %}min="{{ min }}"{% endif %}
 		{% if max is not none %}max="{{ max }}"{% endif %}
 		{% if required %}required{% endif %}
@@ -35,4 +26,3 @@
 	</select>
 </div>
 {%- endmacro %}
->>>>>>> develop
