@@ -1,11 +1,11 @@
 {% for student in students %}
-<tr>
-    <td>{{ student.id }}</td>
-    <td>{{ student.name }}</td>
-    <td>{{ student.email }}</td>
+<tr class="border-b last:border-b-0 border-slate-200 hover:bg-slate-50">
+    <td class="px-3 py-2.5 text-sm text-slate-900">{{ student.id }}</td>
+    <td class="px-3 py-2.5 text-sm text-slate-900">{{ student.name }}</td>
+    <td class="px-3 py-2.5 text-sm text-slate-900">{{ student.email }}</td>
 </tr>
 {% else %}
 <tr>
-    <td colspan="3" style="text-align: center;">Aucun étudiant trouvé.</td>
+    <td colspan="3" class="px-3 py-6 text-center text-sm text-slate-500">Aucun étudiant trouvé.</td>
 </tr>
 {% endfor %}

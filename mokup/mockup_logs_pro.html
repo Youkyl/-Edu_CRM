@@ -1,0 +1,131 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:540px;background:var(--color-background-tertiary)}
+.sidebar{background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:1.25rem 0;display:flex;flex-direction:column}
+.logo-wrap{padding:0 1.25rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1rem}
+.logo-text{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.logo-sub{font-size:11px;color:var(--color-text-tertiary)}
+.nav-s{padding:0 0.75rem;margin-bottom:0.5rem}
+.nl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-tertiary);padding:0 0.5rem;margin-bottom:0.4rem}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);font-size:13px;color:var(--color-text-secondary);margin-bottom:2px}
+.ni.active{background:#FCEBEB;color:#791F1F;font-weight:500}
+.ic{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.ic-dash{background:#378ADD}.ic-stu{background:#1D9E75}.ic-tea{background:#7F77DD}.ic-cou{background:#EF9F27}.ic-log{background:#E24B4A}
+.sf{margin-top:auto;padding:1rem 1.25rem;border-top:0.5px solid var(--color-border-tertiary)}
+.ur{display:flex;align-items:center;gap:8px}
+.av{width:28px;height:28px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#0C447C;flex-shrink:0}
+.main{padding:1.5rem}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem}
+.pt{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+.ps{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.btn-del{font-size:12px;padding:7px 12px;border-radius:var(--border-radius-md);background:transparent;color:#A32D2D;border:0.5px solid #F09595}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:1.25rem}
+.sum-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:0.9rem 1rem;display:flex;align-items:center;gap:10px}
+.sum-icon{width:32px;height:32px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.si-g{background:#EAF3DE}.si-r{background:#FCEBEB}.si-b{background:#E6F1FB}
+.sum-val{font-size:20px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.sum-label{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.table-wrap{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+thead th{padding:10px 14px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-text-secondary);text-align:left;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+tbody td{padding:10px 14px;font-size:12px;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-tertiary)}
+tbody tr:last-child td{border-bottom:none}
+.tag{font-size:10px;padding:2px 7px;border-radius:99px;font-weight:500;display:inline-block}
+.lt-add{background:#EAF3DE;color:#27500A}
+.lt-del{background:#FCEBEB;color:#791F1F}
+.lt-asgn{background:#E6F1FB;color:#0C447C}
+.lt-edit{background:#FAEEDA;color:#633806}
+.mono{font-family:var(--font-mono);font-size:11px;color:var(--color-text-tertiary)}
+</style>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo-wrap">
+      <div class="logo-text">Edu.CRM</div>
+      <div class="logo-sub">Gestion académique</div>
+    </div>
+    <div class="nav-s">
+      <div class="nl">Principal</div>
+      <div class="ni"><div class="ic ic-dash"></div>Dashboard</div>
+      <div class="ni"><div class="ic ic-stu"></div>Étudiants</div>
+      <div class="ni"><div class="ic ic-tea"></div>Enseignants</div>
+      <div class="ni"><div class="ic ic-cou"></div>Cours</div>
+    </div>
+    <div class="nav-s">
+      <div class="nl">Admin</div>
+      <div class="ni active"><div class="ic ic-log"></div>Journal</div>
+    </div>
+    <div class="sf">
+      <div class="ur">
+        <div class="av">AD</div>
+        <div><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">admin</div><div style="font-size:11px;color:var(--color-text-tertiary)">Administrateur</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="pt">Journal d'activité</div>
+        <div class="ps">Toutes les actions effectuées sur la plateforme</div>
+      </div>
+      <span class="btn-del">Vider le journal</span>
+    </div>
+    <div class="summary">
+      <div class="sum-card">
+        <div class="sum-icon si-g"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-6" stroke="#27500A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="sum-val">3</div><div class="sum-label">Ajouts</div></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-icon si-r"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 3l8 8M11 3l-8 8" stroke="#791F1F" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div><div class="sum-val">1</div><div class="sum-label">Suppressions</div></div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-icon si-b"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="#0C447C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="sum-val">2</div><div class="sum-label">Assignations</div></div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:140px">Horodatage</th><th style="width:80px">Utilisateur</th><th style="width:100px">Action</th><th>Cible</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="mono">25/03/2026 14:32:11</td>
+            <td>admin</td>
+            <td><span class="tag lt-add">AJOUT</span></td>
+            <td>Étudiant Alice Dupont (ID 3)</td>
+          </tr>
+          <tr>
+            <td class="mono">25/03/2026 14:30:05</td>
+            <td>admin</td>
+            <td><span class="tag lt-asgn">ASSIGNATION</span></td>
+            <td>Bob Martin → Cours Algorithmique</td>
+          </tr>
+          <tr>
+            <td class="mono">25/03/2026 14:28:00</td>
+            <td>admin</td>
+            <td><span class="tag lt-edit">MODIFICATION</span></td>
+            <td>Cours C002 — titre mis à jour</td>
+          </tr>
+          <tr>
+            <td class="mono">25/03/2026 14:25:18</td>
+            <td>admin</td>
+            <td><span class="tag lt-del">SUPPRESSION</span></td>
+            <td>Enseignant Prof Durand (ID 3)</td>
+          </tr>
+          <tr>
+            <td class="mono">25/03/2026 14:20:44</td>
+            <td>admin</td>
+            <td><span class="tag lt-asgn">ASSIGNATION</span></td>
+            <td>Prof Martin → Cours Algorithmique</td>
+          </tr>
+          <tr>
+            <td class="mono">25/03/2026 14:15:02</td>
+            <td>admin</td>
+            <td><span class="tag lt-add">AJOUT</span></td>
+            <td>Cours C003 — Réseau informatique</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

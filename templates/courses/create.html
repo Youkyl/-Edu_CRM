@@ -5,22 +5,22 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
-  <div class="bg-white rounded-xl shadow-lg p-8">
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-slate-900 mb-2">Ajouter un nouveau cours</h1>
-      <p class="text-slate-600">Créez un cours et associez directement un enseignant si nécessaire.</p>
+  <div class="bg-white border border-slate-200 rounded-xl p-7">
+    <div class="mb-6">
+      <h1 class="text-xl font-semibold text-slate-900">Ajouter un nouveau cours</h1>
+      <p class="text-sm text-slate-600 mt-1">Créez un cours et associez directement un enseignant si nécessaire.</p>
     </div>
 
-    <form method="POST" class="space-y-6">
+    <form method="POST" class="space-y-5">
       {{ form_input('id', 'ID du cours', placeholder='C001', required=True) }}
       {{ form_input('title', 'Titre du cours', placeholder='Algorithmique', required=True) }}
       {{ form_select('teacher_id', 'Enseignant', teachers, placeholder='Aucun enseignant pour le moment') }}
 
-      <div class="flex gap-3 pt-4">
-        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200">
-          ✓ Créer le cours
+      <div class="flex gap-2.5 pt-2">
+        <button type="submit" class="flex-1 bg-blue-700 hover:bg-blue-800 text-white text-sm font-semibold py-2.5 rounded-lg transition">
+          Créer le cours
         </button>
-        <a href="{{ url_for('courses.list_courses') }}" class="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-900 font-semibold py-3 rounded-lg text-center transition duration-200">
+        <a href="{{ url_for('courses.list_courses') }}" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 text-sm font-semibold py-2.5 rounded-lg text-center transition">
           Annuler
         </a>
       </div>

@@ -1,0 +1,229 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:700px;background:var(--color-background-tertiary)}
+.sidebar{background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:1.25rem 0;display:flex;flex-direction:column}
+.sidebar-logo{padding:0 1.25rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1rem}
+.logo-text{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.logo-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.nav-section{padding:0 0.75rem;margin-bottom:0.5rem}
+.nav-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-tertiary);padding:0 0.5rem;margin-bottom:0.4rem}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);font-size:13px;color:var(--color-text-secondary);cursor:pointer;margin-bottom:2px}
+.nav-item.active{background:var(--color-background-info);color:var(--color-text-info);font-weight:500}
+.nav-item:hover:not(.active){background:var(--color-background-secondary)}
+.nav-icon{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.ic-dash{background:#378ADD}
+.ic-stu{background:#1D9E75}
+.ic-tea{background:#7F77DD}
+.ic-cou{background:#EF9F27}
+.ic-log{background:#E24B4A}
+.sidebar-footer{margin-top:auto;padding:1rem 1.25rem;border-top:0.5px solid var(--color-border-tertiary)}
+.user-row{display:flex;align-items:center;gap:8px}
+.avatar{width:30px;height:30px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#0C447C;flex-shrink:0}
+.user-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.user-role{font-size:11px;color:var(--color-text-tertiary)}
+.logout{font-size:11px;color:var(--color-text-danger);margin-top:6px;cursor:pointer}
+.main{padding:1.5rem;overflow:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.page-title{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:13px;color:var(--color-text-secondary);margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.date-badge{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:5px 10px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.25rem}
+.stat{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.1rem}
+.stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.stat-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-secondary)}
+.stat-icon{width:28px;height:28px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center}
+.si-blue{background:#E6F1FB}
+.si-green{background:#E1F5EE}
+.si-purple{background:#EEEDFE}
+.si-amber{background:#FAEEDA}
+.stat-val{font-size:26px;font-weight:500;color:var(--color-text-primary);line-height:1}
+.stat-trend{font-size:11px;margin-top:6px}
+.trend-up{color:#27500A}
+.trend-neutral{color:var(--color-text-tertiary)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem}
+.grid3{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:1.25rem}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.card-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.card-action{font-size:11px;color:var(--color-text-info)}
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:100px;margin-bottom:8px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:3px 3px 0 0}
+.bar-label{font-size:10px;color:var(--color-text-tertiary);white-space:nowrap}
+.bar-val{font-size:10px;color:var(--color-text-secondary);font-weight:500}
+.donut-wrap{display:flex;align-items:center;justify-content:center;gap:1rem}
+.legend-items{display:flex;flex-direction:column;gap:8px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-val{font-weight:500;color:var(--color-text-primary);margin-left:auto}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+thead th{padding:8px 10px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-text-secondary);text-align:left;border-bottom:0.5px solid var(--color-border-tertiary)}
+tbody td{padding:8px 10px;font-size:12px;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-tertiary)}
+tbody tr:last-child td{border-bottom:none}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:500}
+.pill-blue{background:#E6F1FB;color:#0C447C}
+.pill-green{background:#EAF3DE;color:#27500A}
+.pill-amber{background:#FAEEDA;color:#633806}
+.log-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.log-row:last-child{border-bottom:none}
+.log-time{color:var(--color-text-tertiary);font-family:var(--font-mono);font-size:11px;width:75px;flex-shrink:0}
+.log-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:500;flex-shrink:0}
+.lt-add{background:#EAF3DE;color:#27500A}
+.lt-del{background:#FCEBEB;color:#791F1F}
+.lt-asgn{background:#E6F1FB;color:#0C447C}
+.log-msg{color:var(--color-text-primary);flex:1}
+</style>
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">Edu.CRM</div>
+      <div class="logo-sub">Gestion académique</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Principal</div>
+      <div class="nav-item active"><div class="nav-icon ic-dash"></div>Dashboard</div>
+      <div class="nav-item"><div class="nav-icon ic-stu"></div>Étudiants</div>
+      <div class="nav-item"><div class="nav-icon ic-tea"></div>Enseignants</div>
+      <div class="nav-item"><div class="nav-icon ic-cou"></div>Cours</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Admin</div>
+      <div class="nav-item"><div class="nav-icon ic-log"></div>Journal</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="avatar">AD</div>
+        <div>
+          <div class="user-name">admin</div>
+          <div class="user-role">Administrateur</div>
+        </div>
+      </div>
+      <div class="logout">Déconnexion</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Tableau de bord</div>
+        <div class="page-sub">Vue d'ensemble globale de la plateforme</div>
+      </div>
+      <div class="topbar-right">
+        <span class="date-badge">25 mars 2026</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-top">
+          <span class="stat-label">Étudiants</span>
+          <div class="stat-icon si-blue"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4" r="2.5" fill="#378ADD"/><path d="M2 12c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="#378ADD" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="stat-val">2</div>
+        <div class="stat-trend trend-up">+1 ce mois</div>
+      </div>
+      <div class="stat">
+        <div class="stat-top">
+          <span class="stat-label">Enseignants</span>
+          <div class="stat-icon si-purple"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="7" rx="1.5" stroke="#7F77DD" stroke-width="1.2" fill="none"/><path d="M5 12l2-2 2 2" stroke="#7F77DD" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="stat-val">2</div>
+        <div class="stat-trend trend-neutral">Aucun changement</div>
+      </div>
+      <div class="stat">
+        <div class="stat-top">
+          <span class="stat-label">Cours</span>
+          <div class="stat-icon si-amber"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="3" width="10" height="8" rx="1.5" stroke="#EF9F27" stroke-width="1.2" fill="none"/><path d="M4 6h6M4 8.5h4" stroke="#EF9F27" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="stat-val">2</div>
+        <div class="stat-trend trend-up">+1 ce mois</div>
+      </div>
+      <div class="stat">
+        <div class="stat-top">
+          <span class="stat-label">Taux inscription</span>
+          <div class="stat-icon si-green"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 10l3-3 2.5 2.5L11 4" stroke="#1D9E75" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="stat-val">75%</div>
+        <div class="stat-trend trend-up">Moy. étudiants/cours</div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Étudiants par cours</span>
+          <span class="card-action">Voir tous les cours</span>
+        </div>
+        <div class="chart-bars">
+          <div class="bar-wrap">
+            <div class="bar-val">2</div>
+            <div class="bar" style="height:80px;background:#378ADD"></div>
+            <div class="bar-label">Algo.</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-val">1</div>
+            <div class="bar" style="height:40px;background:#85B7EB"></div>
+            <div class="bar-label">Méca.</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-val">0</div>
+            <div class="bar" style="height:4px;background:#B5D4F4"></div>
+            <div class="bar-label">Réseau</div>
+          </div>
+          <div class="bar-wrap">
+            <div class="bar-val">0</div>
+            <div class="bar" style="height:4px;background:#B5D4F4"></div>
+            <div class="bar-label">BDD</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Répartition</span>
+        </div>
+        <div class="donut-wrap">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#E6F1FB" stroke-width="14"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#378ADD" stroke-width="14" stroke-dasharray="70 106" stroke-dashoffset="0" transform="rotate(-90 40 40)"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#7F77DD" stroke-width="14" stroke-dasharray="53 123" stroke-dashoffset="-70" transform="rotate(-90 40 40)"/>
+            <circle cx="40" cy="40" r="28" fill="none" stroke="#EF9F27" stroke-width="14" stroke-dasharray="53 123" stroke-dashoffset="-123" transform="rotate(-90 40 40)"/>
+          </svg>
+          <div class="legend-items">
+            <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>Étudiants<span class="legend-val">2</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#7F77DD"></div>Enseignants<span class="legend-val">2</span></div>
+            <div class="legend-item"><div class="legend-dot" style="background:#EF9F27"></div>Cours<span class="legend-val">2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Derniers étudiants inscrits</span>
+          <span class="card-action">Voir tous</span>
+        </div>
+        <table>
+          <thead><tr><th>Nom</th><th>Email</th><th>Cours</th></tr></thead>
+          <tbody>
+            <tr><td>Alice Dupont</td><td>alice@edu.com</td><td><span class="pill pill-blue">2 cours</span></td></tr>
+            <tr><td>Bob Martin</td><td>bob@edu.com</td><td><span class="pill pill-blue">1 cours</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Activité récente</span>
+          <span class="card-action">Voir le journal</span>
+        </div>
+        <div class="log-row"><span class="log-time">14:32</span><span class="log-tag lt-add">AJOUT</span><span class="log-msg">Étudiant Alice Dupont</span></div>
+        <div class="log-row"><span class="log-time">14:30</span><span class="log-tag lt-asgn">ASSIGN</span><span class="log-msg">Bob → Algorithmique</span></div>
+        <div class="log-row"><span class="log-time">14:25</span><span class="log-tag lt-add">AJOUT</span><span class="log-msg">Cours Mécanique</span></div>
+        <div class="log-row"><span class="log-time">14:18</span><span class="log-tag lt-del">SUPPR</span><span class="log-msg">Prof Durand supprimé</span></div>
+      </div>
+    </div>
+  </div>
+</div>

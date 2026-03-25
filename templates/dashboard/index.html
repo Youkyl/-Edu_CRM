@@ -3,38 +3,127 @@
 {% block title %}Dashboard — Edu.CRM{% endblock %}
 
 {% block content %}
-<!-- Header -->
-<div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-	<h1 class="text-3xl font-bold text-slate-900 mb-2">Tableau de bord</h1>
-	{% if role == 'admin' %}
-	<p class="text-slate-600">Vue d'ensemble globale de la plateforme.</p>
-	{% elif role == 'teacher' %}
-	<p class="text-slate-600">Vue de vos cours et des étudiants inscrits.</p>
-	{% elif role == 'student' %}
-	<p class="text-slate-600">Vue de vos cours et enseignants.</p>
-	{% endif %}
+<div class="flex items-center justify-between gap-3 mb-5">
+	<div>
+		<div class="text-lg font-semibold text-slate-900">Tableau de bord</div>
+		{% if role == 'admin' %}
+		<div class="text-sm text-slate-600 mt-0.5">Vue d'ensemble globale de la plateforme.</div>
+		{% elif role == 'teacher' %}
+		<div class="text-sm text-slate-600 mt-0.5">Vue de vos cours et des etudiants inscrits.</div>
+		{% elif role == 'student' %}
+		<div class="text-sm text-slate-600 mt-0.5">Vue de vos cours et enseignants.</div>
+		{% endif %}
+	</div>
+	<div class="text-xs text-slate-600 bg-white border border-slate-200 px-2.5 py-1.5 rounded-lg">25 mars 2026</div>
 </div>
 
-<!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-	<!-- Étudiants Card -->
-	<div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
-		<p class="text-blue-100 text-xs font-semibold uppercase tracking-widest mb-2">Étudiants</p>
-		<p class="text-5xl font-bold">{{ nb_students }}</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mb-4">
+	<div class="bg-white border border-slate-200 rounded-xl p-4">
+		<div class="flex items-center justify-between mb-2">
+			<span class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">Etudiants</span>
+			<span class="w-6 h-6 rounded-md bg-sky-100"></span>
+		</div>
+		<div class="text-3xl font-semibold leading-none text-slate-900">{{ nb_students }}</div>
+		<div class="text-[11px] mt-1 text-slate-500">Total actuel</div>
 	</div>
 
-	<!-- Enseignants Card (admin & teacher) -->
-	{% if role != 'student' %}
-	<div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white">
-		<p class="text-emerald-100 text-xs font-semibold uppercase tracking-widest mb-2">Enseignants</p>
-		<p class="text-5xl font-bold">{{ nb_teachers }}</p>
+	<div class="bg-white border border-slate-200 rounded-xl p-4">
+		<div class="flex items-center justify-between mb-2">
+			<span class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">Enseignants</span>
+			<span class="w-6 h-6 rounded-md bg-violet-100"></span>
+		</div>
+		<div class="text-3xl font-semibold leading-none text-slate-900">{{ nb_teachers }}</div>
+		<div class="text-[11px] mt-1 text-slate-500">Profils actifs</div>
 	</div>
-	{% endif %}
 
-	<!-- Cours Card  -->
-	<div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
-		<p class="text-purple-100 text-xs font-semibold uppercase tracking-widest mb-2">Cours</p>
-		<p class="text-5xl font-bold">{{ nb_courses }}</p>
+	<div class="bg-white border border-slate-200 rounded-xl p-4">
+		<div class="flex items-center justify-between mb-2">
+			<span class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">Cours</span>
+			<span class="w-6 h-6 rounded-md bg-amber-100"></span>
+		</div>
+		<div class="text-3xl font-semibold leading-none text-slate-900">{{ nb_courses }}</div>
+		<div class="text-[11px] mt-1 text-slate-500">Catalogues disponibles</div>
+	</div>
+
+	<div class="bg-white border border-slate-200 rounded-xl p-4">
+		<div class="flex items-center justify-between mb-2">
+			<span class="text-[11px] font-semibold uppercase tracking-wide text-slate-600">Ratio etudiant/cours</span>
+			<span class="w-6 h-6 rounded-md bg-emerald-100"></span>
+		</div>
+		<div class="text-3xl font-semibold leading-none text-slate-900">{% if nb_courses %}{{ (nb_students / nb_courses)|round(1) }}{% else %}0{% endif %}</div>
+		<div class="text-[11px] mt-1 text-slate-500">Moyenne globale</div>
+	</div>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-3">
+	<div class="xl:col-span-2 bg-white border border-slate-200 rounded-xl p-4">
+		<div class="flex justify-between items-center mb-3">
+			<span class="text-sm font-semibold text-slate-900">Repartition simplifiee</span>
+			<span class="text-xs text-sky-900">Synthese visuelle</span>
+		</div>
+		<div class="flex items-end gap-2 h-[116px]">
+			{% set max_v = [nb_students, nb_teachers, nb_courses, 1]|max %}
+			{% if nb_students == 0 %}{% set s_h = 'h-1' %}
+			{% elif nb_students * 4 < max_v %}{% set s_h = 'h-6' %}
+			{% elif nb_students * 4 < max_v * 2 %}{% set s_h = 'h-12' %}
+			{% elif nb_students * 4 < max_v * 3 %}{% set s_h = 'h-16' %}
+			{% else %}{% set s_h = 'h-24' %}
+			{% endif %}
+
+			{% if nb_teachers == 0 %}{% set t_h = 'h-1' %}
+			{% elif nb_teachers * 4 < max_v %}{% set t_h = 'h-6' %}
+			{% elif nb_teachers * 4 < max_v * 2 %}{% set t_h = 'h-12' %}
+			{% elif nb_teachers * 4 < max_v * 3 %}{% set t_h = 'h-16' %}
+			{% else %}{% set t_h = 'h-24' %}
+			{% endif %}
+
+			{% if nb_courses == 0 %}{% set c_h = 'h-1' %}
+			{% elif nb_courses * 4 < max_v %}{% set c_h = 'h-6' %}
+			{% elif nb_courses * 4 < max_v * 2 %}{% set c_h = 'h-12' %}
+			{% elif nb_courses * 4 < max_v * 3 %}{% set c_h = 'h-16' %}
+			{% else %}{% set c_h = 'h-24' %}
+			{% endif %}
+
+			<div class="flex-1 flex flex-col items-center gap-1">
+				<div class="text-[11px] font-semibold text-slate-600">{{ nb_students }}</div>
+				<div class="w-full rounded-t {{ s_h }} bg-sky-500"></div>
+				<div class="text-[11px] text-slate-500">Etudiants</div>
+			</div>
+			<div class="flex-1 flex flex-col items-center gap-1">
+				<div class="text-[11px] font-semibold text-slate-600">{{ nb_teachers }}</div>
+				<div class="w-full rounded-t {{ t_h }} bg-violet-500"></div>
+				<div class="text-[11px] text-slate-500">Enseignants</div>
+			</div>
+			<div class="flex-1 flex flex-col items-center gap-1">
+				<div class="text-[11px] font-semibold text-slate-600">{{ nb_courses }}</div>
+				<div class="w-full rounded-t {{ c_h }} bg-amber-500"></div>
+				<div class="text-[11px] text-slate-500">Cours</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="bg-white border border-slate-200 rounded-xl p-4">
+		<div class="flex justify-between items-center mb-3">
+			<span class="text-sm font-semibold text-slate-900">Activite recente</span>
+			{% if role == 'admin' %}<a class="text-xs text-sky-900" href="{{ url_for('logs.index') }}">Voir le journal</a>{% endif %}
+		</div>
+		<div class="grid gap-2.5">
+			<div class="grid grid-cols-[auto_auto_1fr] gap-2 items-center pb-2 border-b border-slate-200 text-xs">
+				<span class="text-[11px] text-slate-500 font-mono">14:32</span>
+				<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">AJOUT</span>
+				<span class="text-slate-900">Nouvelle operation enregistree</span>
+			</div>
+			<div class="grid grid-cols-[auto_auto_1fr] gap-2 items-center pb-2 border-b border-slate-200 text-xs">
+				<span class="text-[11px] text-slate-500 font-mono">14:18</span>
+				<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-900">MAJ</span>
+				<span class="text-slate-900">Mise a jour des donnees</span>
+			</div>
+			<div class="grid grid-cols-[auto_auto_1fr] gap-2 items-center text-xs">
+				<span class="text-[11px] text-slate-500 font-mono">13:55</span>
+				<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800">SUIVI</span>
+				<span class="text-slate-900">Controle de coherence effectue</span>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

@@ -1,74 +1,64 @@
 ﻿{% set role = session.get('role') %}
-<nav class="bg-white border-b border-slate-200 shadow-sm">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-		<div class="flex justify-between items-center h-16">
-			<!-- Logo/Brand -->
-			<a href="{{ url_for('dashboard.index') }}" class="flex items-center space-x-2">
-				<span class="text-xl font-bold text-blue-600">Edu.CRM</span>
-			</a>
+{% set endpoint = request.endpoint or '' %}
+<aside class="hidden md:flex md:flex-col fixed left-0 top-0 h-screen w-56 bg-white border-r border-slate-200 py-5 overflow-y-auto">
+	<div class="px-4 pb-4 border-b border-slate-200 mb-3.5">
+		<a href="{{ url_for('dashboard.index') }}" class="inline-block text-base font-semibold text-slate-900">Edu.CRM</a>
+		<div class="mt-0.5 text-[11px] text-slate-500">Gestion academique</div>
+	</div>
 
-			<!-- Navigation Links -->
-			<div class="hidden md:flex items-center space-x-1">
-				<!-- Dashboard (tous les rôles) -->
-				<a href="{{ url_for('dashboard.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
-					Dashboard
-				</a>
+	<div class="px-2.5 mb-1.5">
+		<div class="px-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-500 mb-1">Principal</div>
+		<a href="{{ url_for('dashboard.index') }}" class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-[13px] font-medium mb-1 {% if endpoint == 'dashboard.index' %}bg-sky-100 text-sky-900{% else %}text-slate-700 hover:bg-slate-100{% endif %}">
+			<span class="w-3 h-3 rounded-[3px] bg-sky-500"></span>
+			Dashboard
+		</a>
 
-				<!-- Étudiants (admin et teacher) -->
-				{% if role in ['admin', 'teacher'] %}
-				<a href="{{ url_for('students.list_students') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
-					Étudiants
-				</a>
-				{% endif %}
+		{% if role in ['admin', 'teacher'] %}
+		<a href="{{ url_for('students.list_students') }}" class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-[13px] font-medium mb-1 {% if endpoint and endpoint.startswith('students.') and endpoint != 'students.personal_infos' %}bg-sky-100 text-sky-900{% else %}text-slate-700 hover:bg-slate-100{% endif %}">
+			<span class="w-3 h-3 rounded-[3px] bg-emerald-500"></span>
+			Etudiants
+		</a>
+		{% endif %}
 
-				<!-- Enseignants (admin seulement) -->
-				{% if role == 'admin' %}
-				<a href="{{ url_for('teachers.list_teachers') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
-					Enseignants
-				</a>
-				{% endif %}
+		{% if role == 'admin' %}
+		<a href="{{ url_for('teachers.list_teachers') }}" class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-[13px] font-medium mb-1 {% if endpoint and endpoint.startswith('teachers.') %}bg-sky-100 text-sky-900{% else %}text-slate-700 hover:bg-slate-100{% endif %}">
+			<span class="w-3 h-3 rounded-[3px] bg-violet-500"></span>
+			Enseignants
+		</a>
+		{% endif %}
 
-				<!-- Cours -->
-				{% if role == 'admin' %}
-				<a href="{{ url_for('courses.list_courses') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
-					Cours
-				</a>
-				{% elif role == 'teacher' %}
-				<a href="{{ url_for('courses.list_courses') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
-					Mes Cours
-				</a>
-				{% elif role == 'student' %}
-				<a href="{{ url_for('courses.list_courses') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
-					Mes Cours
-				</a>
-				{% endif %}
+		<a href="{{ url_for('courses.list_courses') }}" class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-[13px] font-medium mb-1 {% if endpoint and endpoint.startswith('courses.') %}bg-sky-100 text-sky-900{% else %}text-slate-700 hover:bg-slate-100{% endif %}">
+			<span class="w-3 h-3 rounded-[3px] bg-amber-500"></span>
+			{% if role == 'admin' %}Cours{% else %}Mes cours{% endif %}
+		</a>
 
-				<!-- Mon profil (student) -->
-				{% if role == 'student' %}
-				<a href="{{ url_for('students.personal_infos', student_id=session.get('student_id')) }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
-					Mon profil
-				</a>
-				{% endif %}
+		{% if role == 'student' %}
+		<a href="{{ url_for('students.personal_infos', student_id=session.get('student_id')) }}" class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-[13px] font-medium mb-1 {% if endpoint == 'students.personal_infos' %}bg-sky-100 text-sky-900{% else %}text-slate-700 hover:bg-slate-100{% endif %}">
+			<span class="w-3 h-3 rounded-[3px] bg-slate-500"></span>
+			Mon profil
+		</a>
+		{% endif %}
+	</div>
 
-				<!-- Logs (admin) -->
-				{% if role == 'admin' %}
-				<a href="{{ url_for('logs.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
-					Logs
-				</a>
-				{% endif %}
-			</div>
+	{% if role == 'admin' %}
+	<div class="px-2.5 mb-1.5">
+		<div class="px-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-500 mb-1">Admin</div>
+		<a href="{{ url_for('logs.index') }}" class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-[13px] font-medium mb-1 {% if endpoint and endpoint.startswith('logs.') %}bg-sky-100 text-sky-900{% else %}text-slate-700 hover:bg-slate-100{% endif %}">
+			<span class="w-3 h-3 rounded-[3px] bg-rose-500"></span>
+			Journal
+		</a>
+	</div>
+	{% endif %}
 
-			<!-- Right side: User info + Logout -->
-			<div class="flex items-center space-x-4">
-				{% if session.get('user_id') %}
-				<span class="text-sm text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-					{{ session.get('user_id') }} <span class="font-semibold text-slate-700">{{ role }}</span>
-				</span>
-				<a href="{{ url_for('auth.logout') }}" class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition">
-					Déconnexion
-				</a>
-				{% endif %}
+	<div class="mt-auto px-4 pt-4 border-t border-slate-200">
+		{% set user_value = session.get('user_id', 'U') %}
+		<div class="flex items-center gap-2">
+			<div class="w-8 h-8 rounded-full bg-sky-100 text-sky-900 flex items-center justify-center text-[11px] font-bold uppercase">{{ user_value[:2] }}</div>
+			<div>
+				<div class="text-[13px] font-semibold text-slate-900">{{ session.get('user_id') }}</div>
+				<div class="text-[11px] text-slate-500 capitalize">{{ role }}</div>
 			</div>
 		</div>
+		<a href="{{ url_for('auth.logout') }}" class="inline-block mt-2 text-xs text-rose-700 hover:text-rose-800">Deconnexion</a>
 	</div>
-</nav>
+</aside>

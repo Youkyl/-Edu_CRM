@@ -3,59 +3,86 @@
 {% block title %}Journal d'activité — Edu.CRM{% endblock %}
 
 {% block content %}
-<!-- Header -->
-<div class="flex justify-between items-center mb-6">
+{% set ns = namespace(add=0, delete=0, other=0) %}
+{% for log in logs %}
+  {% if 'ADD' in log.action %}
+    {% set ns.add = ns.add + 1 %}
+  {% elif 'DELETE' in log.action %}
+    {% set ns.delete = ns.delete + 1 %}
+  {% else %}
+    {% set ns.other = ns.other + 1 %}
+  {% endif %}
+{% endfor %}
+
+<div class="flex justify-between items-start gap-3 mb-4">
   <div>
-    <h2 class="text-2xl font-bold text-slate-900">Journal d'activité</h2>
-    <p class="text-slate-600 text-sm mt-1">Historique complèt aides actions effectuées sur la plateforme.</p>
+    <div class="text-lg font-semibold text-slate-900">Journal d'activite</div>
+    <div class="text-sm text-slate-600 mt-0.5">Toutes les actions effectuees sur la plateforme</div>
   </div>
-  <a href="{{ url_for('logs.clear') }}"
-     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition"
-     onclick="return confirm('Effacer tout le journal ?')">
-     Effacer le journal
-  </a>
+  <a href="{{ url_for('logs.clear') }}" class="text-xs rounded-lg px-3 py-2 border border-rose-300 text-rose-700" onclick="return confirm('Effacer tout le journal ?')">Vider le journal</a>
 </div>
 
-<!-- Table -->
 {% if logs %}
-<div class="overflow-x-auto shadow-lg rounded-xl">
-  <table class="w-full border-collapse">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+  <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center gap-2.5">
+    <div class="w-7 h-7 rounded-md bg-emerald-100 shrink-0"></div>
+    <div>
+      <div class="text-xl font-semibold leading-none text-slate-900">{{ ns.add }}</div>
+      <div class="mt-0.5 text-[11px] uppercase tracking-wide text-slate-600">Ajouts</div>
+    </div>
+  </div>
+  <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center gap-2.5">
+    <div class="w-7 h-7 rounded-md bg-rose-100 shrink-0"></div>
+    <div>
+      <div class="text-xl font-semibold leading-none text-slate-900">{{ ns.delete }}</div>
+      <div class="mt-0.5 text-[11px] uppercase tracking-wide text-slate-600">Suppressions</div>
+    </div>
+  </div>
+  <div class="bg-white border border-slate-200 rounded-xl p-3 flex items-center gap-2.5">
+    <div class="w-7 h-7 rounded-md bg-sky-100 shrink-0"></div>
+    <div>
+      <div class="text-xl font-semibold leading-none text-slate-900">{{ ns.other }}</div>
+      <div class="mt-0.5 text-[11px] uppercase tracking-wide text-slate-600">Autres actions</div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+  <table class="w-full border-collapse table-fixed">
     <thead>
-      <tr class="bg-slate-100 border-b border-slate-200">
-        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">ID</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">Date / Heure</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">Utilisateur</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">Action</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">Cible</th>
+      <tr>
+        <th class="w-[140px] px-3 py-2.5 text-left text-[11px] uppercase tracking-wide text-slate-600 bg-slate-50 border-b border-slate-200">Horodatage</th>
+        <th class="w-[90px] px-3 py-2.5 text-left text-[11px] uppercase tracking-wide text-slate-600 bg-slate-50 border-b border-slate-200">Utilisateur</th>
+        <th class="w-[120px] px-3 py-2.5 text-left text-[11px] uppercase tracking-wide text-slate-600 bg-slate-50 border-b border-slate-200">Action</th>
+        <th class="px-3 py-2.5 text-left text-[11px] uppercase tracking-wide text-slate-600 bg-slate-50 border-b border-slate-200">Cible</th>
       </tr>
     </thead>
     <tbody>
       {% for log in logs %}
-      <tr class="border-b border-slate-200 hover:bg-slate-50 transition">
-        <td class="px-6 py-4 text-sm text-slate-700">{{ log.id }}</td>
-        <td class="px-6 py-4 text-sm text-slate-600">{{ log.timestamp }}</td>
-        <td class="px-6 py-4 text-sm font-medium text-slate-900">{{ log.user }}</td>
-        <td class="px-6 py-4 text-sm">
+      <tr class="border-b last:border-b-0 border-slate-200">
+        <td class="px-3 py-2.5 text-[11px] text-slate-500 font-mono">{{ log.timestamp }}</td>
+        <td class="px-3 py-2.5 text-sm text-slate-900">{{ log.user }}</td>
+        <td class="px-3 py-2.5 text-sm text-slate-900">
           {% if "ADD" in log.action %}
-            <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-full">{{ log.action }}</span>
+            <span class="inline-block rounded-full text-[10px] font-semibold px-2 py-0.5 uppercase tracking-wide bg-emerald-100 text-emerald-800">{{ log.action }}</span>
           {% elif "DELETE" in log.action %}
-            <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ log.action }}</span>
+            <span class="inline-block rounded-full text-[10px] font-semibold px-2 py-0.5 uppercase tracking-wide bg-rose-100 text-rose-800">{{ log.action }}</span>
           {% elif "UPDATE" in log.action %}
-            <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full">{{ log.action }}</span>
+            <span class="inline-block rounded-full text-[10px] font-semibold px-2 py-0.5 uppercase tracking-wide bg-amber-100 text-amber-800">{{ log.action }}</span>
           {% else %}
-            <span class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-xs font-semibold rounded-full">{{ log.action }}</span>
+            <span class="inline-block rounded-full text-[10px] font-semibold px-2 py-0.5 uppercase tracking-wide bg-sky-100 text-sky-900">{{ log.action }}</span>
           {% endif %}
         </td>
-        <td class="px-6 py-4 text-sm text-slate-600">{{ log.target }}</td>
+        <td class="px-3 py-2.5 text-sm text-slate-900">{{ log.target }}</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 {% else %}
-<div class="bg-blue-50 border border-blue-200 text-blue-800 p-6 rounded-xl text-center">
-  <p class="text-lg font-semibold">Aucune activité enregistrée</p>
-  <p class="text-sm mt-2">Les actions effectuées sur la plateforme apparaîtront ici.</p>
+<div class="text-center bg-white border border-slate-200 rounded-xl p-7">
+  <div class="text-base font-semibold text-slate-900">Aucune activite enregistree</div>
+  <div class="mt-1 text-sm text-slate-500">Les actions effectuees apparaitront ici.</div>
 </div>
 {% endif %}
 {% endblock %}

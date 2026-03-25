@@ -5,22 +5,22 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
-  <div class="bg-white rounded-xl shadow-lg p-8">
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-slate-900 mb-2">Ajouter un enseignant</h2>
-      <p class="text-slate-600">Remplissez le formulaire ci-dessous pour créer un nouvel enseignant.</p>
+  <div class="bg-white border border-slate-200 rounded-xl p-7">
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-slate-900">Ajouter un enseignant</h2>
+      <p class="text-sm text-slate-600 mt-1">Remplissez le formulaire ci-dessous pour créer un nouvel enseignant.</p>
     </div>
 
-    <form method="POST" class="space-y-6">
+    <form method="POST" class="space-y-5">
       {{ form_input('name', 'Nom', placeholder='Prof Dupont', required=True) }}
       {{ form_input('email', 'Email', type='email', placeholder='prof@edu.com', required=True) }}
       {{ form_input('speciality', 'Spécialité', placeholder='Mathématiques', required=True) }}
       
-      <div class="flex gap-3 pt-4">
-        <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition duration-200">
-          ✓ Ajouter
+      <div class="flex gap-2.5 pt-2">
+        <button type="submit" class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold py-2.5 rounded-lg transition">
+          Ajouter
         </button>
-        <a href="{{ url_for('teachers.list_teachers') }}" class="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-900 font-semibold py-3 rounded-lg text-center transition duration-200">
+        <a href="{{ url_for('teachers.list_teachers') }}" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 text-sm font-semibold py-2.5 rounded-lg text-center transition">
           Annuler
         </a>
       </div>

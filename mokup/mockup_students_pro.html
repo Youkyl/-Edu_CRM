@@ -1,0 +1,146 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:580px;background:var(--color-background-tertiary)}
+.sidebar{background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:1.25rem 0;display:flex;flex-direction:column}
+.sidebar-logo{padding:0 1.25rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1rem}
+.logo-text{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.logo-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.nav-section{padding:0 0.75rem;margin-bottom:0.5rem}
+.nav-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-tertiary);padding:0 0.5rem;margin-bottom:0.4rem}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);font-size:13px;color:var(--color-text-secondary);margin-bottom:2px}
+.nav-item.active{background:#E1F5EE;color:#085041;font-weight:500}
+.nav-icon{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.ic-dash{background:#378ADD}.ic-stu{background:#1D9E75}.ic-tea{background:#7F77DD}.ic-cou{background:#EF9F27}.ic-log{background:#E24B4A}
+.sidebar-footer{margin-top:auto;padding:1rem 1.25rem;border-top:0.5px solid var(--color-border-tertiary)}
+.user-row{display:flex;align-items:center;gap:8px}
+.avatar{width:28px;height:28px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#0C447C;flex-shrink:0}
+.user-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.user-role{font-size:11px;color:var(--color-text-tertiary)}
+.main{padding:1.5rem}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem}
+.page-title{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+.page-sub{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.actions{display:flex;gap:8px;align-items:center}
+.btn-primary{font-size:12px;padding:7px 14px;border-radius:var(--border-radius-md);background:#185FA5;color:#E6F1FB;border:none;white-space:nowrap}
+.btn-outline{font-size:12px;padding:7px 12px;border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary);white-space:nowrap}
+.filters{display:flex;align-items:center;gap:8px;margin-bottom:1rem}
+.search-wrap{flex:1;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 12px;font-size:13px;color:var(--color-text-tertiary);display:flex;align-items:center;gap:6px}
+.search-icon{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--color-text-tertiary);flex-shrink:0}
+.count-badge{font-size:11px;padding:3px 8px;border-radius:99px;background:#E1F5EE;color:#085041;font-weight:500}
+.table-wrap{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+thead th{padding:10px 14px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-text-secondary);text-align:left;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+tbody td{padding:10px 14px;font-size:13px;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-tertiary)}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--color-background-secondary)}
+.cell-name{display:flex;align-items:center;gap:8px}
+.mini-avatar{width:26px;height:26px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#0C447C;flex-shrink:0}
+.name-link{color:var(--color-text-info);font-weight:500}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:500}
+.pill-blue{background:#E6F1FB;color:#0C447C}
+.row-actions{display:flex;gap:6px}
+.btn-sm{font-size:11px;padding:4px 9px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary);background:transparent;cursor:pointer}
+.btn-sm-del{font-size:11px;padding:4px 9px;border-radius:var(--border-radius-md);border:0.5px solid #F09595;color:#A32D2D;background:transparent}
+.empty-row td{text-align:center;color:var(--color-text-tertiary);font-size:13px;padding:2rem}
+</style>
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">Edu.CRM</div>
+      <div class="logo-sub">Gestion académique</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Principal</div>
+      <div class="nav-item"><div class="nav-icon ic-dash"></div>Dashboard</div>
+      <div class="nav-item active"><div class="nav-icon ic-stu"></div>Étudiants</div>
+      <div class="nav-item"><div class="nav-icon ic-tea"></div>Enseignants</div>
+      <div class="nav-item"><div class="nav-icon ic-cou"></div>Cours</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Admin</div>
+      <div class="nav-item"><div class="nav-icon ic-log"></div>Journal</div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="avatar">AD</div>
+        <div>
+          <div class="user-name">admin</div>
+          <div class="user-role">Administrateur</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="page-title">Étudiants <span style="font-size:13px;font-weight:400;color:var(--color-text-tertiary)">(2)</span></div>
+        <div class="page-sub">Liste de tous les étudiants inscrits</div>
+      </div>
+      <div class="actions">
+        <span class="btn-outline">Export CSV</span>
+        <span class="btn-primary">+ Ajouter un étudiant</span>
+      </div>
+    </div>
+    <div class="filters">
+      <div class="search-wrap">
+        <div class="search-icon"></div>
+        <span>Rechercher par nom ou email...</span>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:40px">#</th>
+            <th style="width:180px">Nom</th>
+            <th>Email</th>
+            <th style="width:70px">Âge</th>
+            <th style="width:90px">Cours</th>
+            <th style="width:140px">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--color-text-tertiary)">1</td>
+            <td>
+              <div class="cell-name">
+                <div class="mini-avatar">AD</div>
+                <span class="name-link">Alice Dupont</span>
+              </div>
+            </td>
+            <td style="color:var(--color-text-secondary)">alice@edu.com</td>
+            <td>20 ans</td>
+            <td><span class="pill pill-blue">2 cours</span></td>
+            <td>
+              <div class="row-actions">
+                <span class="btn-sm">Voir</span>
+                <span class="btn-sm">Modifier</span>
+                <span class="btn-sm-del">Supprimer</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td style="color:var(--color-text-tertiary)">2</td>
+            <td>
+              <div class="cell-name">
+                <div class="mini-avatar" style="background:#E1F5EE;color:#085041">BM</div>
+                <span class="name-link">Bob Martin</span>
+              </div>
+            </td>
+            <td style="color:var(--color-text-secondary)">bob@edu.com</td>
+            <td>22 ans</td>
+            <td><span class="pill pill-blue">1 cours</span></td>
+            <td>
+              <div class="row-actions">
+                <span class="btn-sm">Voir</span>
+                <span class="btn-sm">Modifier</span>
+                <span class="btn-sm-del">Supprimer</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

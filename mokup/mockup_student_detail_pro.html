@@ -1,0 +1,113 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{display:grid;grid-template-columns:200px 1fr;min-height:600px;background:var(--color-background-tertiary)}
+.sidebar{background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:1.25rem 0;display:flex;flex-direction:column}
+.logo-wrap{padding:0 1.25rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1rem}
+.logo-text{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.logo-sub{font-size:11px;color:var(--color-text-tertiary)}
+.nav-s{padding:0 0.75rem;margin-bottom:0.5rem}
+.nl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.07em;color:var(--color-text-tertiary);padding:0 0.5rem;margin-bottom:0.4rem}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--border-radius-md);font-size:13px;color:var(--color-text-secondary);margin-bottom:2px}
+.ni.active{background:#E1F5EE;color:#085041;font-weight:500}
+.ic{width:14px;height:14px;border-radius:3px;flex-shrink:0}
+.ic-dash{background:#378ADD}.ic-stu{background:#1D9E75}.ic-tea{background:#7F77DD}.ic-cou{background:#EF9F27}.ic-log{background:#E24B4A}
+.sf{margin-top:auto;padding:1rem 1.25rem;border-top:0.5px solid var(--color-border-tertiary)}
+.ur{display:flex;align-items:center;gap:8px}
+.av{width:28px;height:28px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#0C447C;flex-shrink:0}
+.main{padding:1.5rem}
+.breadcrumb{font-size:12px;color:var(--color-text-tertiary);margin-bottom:1rem}
+.breadcrumb span{color:var(--color-text-info)}
+.profile-header{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.big-avatar{width:56px;height:56px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:#0C447C;flex-shrink:0}
+.profile-name{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+.profile-sub{font-size:12px;color:var(--color-text-secondary);margin-top:3px}
+.profile-actions{margin-left:auto;display:flex;gap:8px}
+.btn-edit{font-size:12px;padding:6px 12px;border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);border:0.5px solid var(--color-border-secondary)}
+.btn-del{font-size:12px;padding:6px 12px;border-radius:var(--border-radius-md);background:transparent;color:#A32D2D;border:0.5px solid #F09595}
+.grid2{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.1rem}
+.card-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:1rem;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.info-row:last-child{border-bottom:none}
+.ik{color:var(--color-text-secondary)}
+.iv{color:var(--color-text-primary);font-weight:500}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+thead th{padding:8px 12px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-text-secondary);text-align:left;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+tbody td{padding:9px 12px;font-size:12px;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-tertiary)}
+tbody tr:last-child td{border-bottom:none}
+.pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:500}
+.pill-blue{background:#E6F1FB;color:#0C447C}
+.pill-purple{background:#EEEDFE;color:#3C3489}
+</style>
+<div class="app">
+  <div class="sidebar">
+    <div class="logo-wrap">
+      <div class="logo-text">Edu.CRM</div>
+      <div class="logo-sub">Gestion académique</div>
+    </div>
+    <div class="nav-s">
+      <div class="nl">Principal</div>
+      <div class="ni"><div class="ic ic-dash"></div>Dashboard</div>
+      <div class="ni active"><div class="ic ic-stu"></div>Étudiants</div>
+      <div class="ni"><div class="ic ic-tea"></div>Enseignants</div>
+      <div class="ni"><div class="ic ic-cou"></div>Cours</div>
+    </div>
+    <div class="nav-s">
+      <div class="nl">Admin</div>
+      <div class="ni"><div class="ic ic-log"></div>Journal</div>
+    </div>
+    <div class="sf">
+      <div class="ur">
+        <div class="av">AD</div>
+        <div><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">admin</div><div style="font-size:11px;color:var(--color-text-tertiary)">Administrateur</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="breadcrumb">Étudiants &rsaquo; <span>Alice Dupont</span></div>
+    <div class="profile-header">
+      <div class="big-avatar">AD</div>
+      <div>
+        <div class="profile-name">Alice Dupont</div>
+        <div class="profile-sub">Étudiante · ID #1 · alice@edu.com</div>
+      </div>
+      <div class="profile-actions">
+        <span class="btn-edit">Modifier</span>
+        <span class="btn-del">Supprimer</span>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Informations</div>
+        <div class="info-row"><span class="ik">ID</span><span class="iv">1</span></div>
+        <div class="info-row"><span class="ik">Nom</span><span class="iv">Alice Dupont</span></div>
+        <div class="info-row"><span class="ik">Email</span><span class="iv">alice@edu.com</span></div>
+        <div class="info-row"><span class="ik">Âge</span><span class="iv">20 ans</span></div>
+        <div class="info-row"><span class="ik">Cours</span><span class="iv"><span class="pill pill-blue">2 cours</span></span></div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:10px">
+          <div class="card-title">Cours inscrits</div>
+          <table>
+            <thead><tr><th>ID</th><th>Titre</th><th>Enseignant</th></tr></thead>
+            <tbody>
+              <tr><td>C001</td><td>Algorithmique</td><td>Prof Martin</td></tr>
+              <tr><td>C002</td><td>Mécanique</td><td>Prof Leroy</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-title">Enseignants</div>
+          <table>
+            <thead><tr><th>Nom</th><th>Email</th><th>Spécialité</th></tr></thead>
+            <tbody>
+              <tr><td>Prof Martin</td><td>martin@edu.com</td><td><span class="pill pill-purple">Mathématiques</span></td></tr>
+              <tr><td>Prof Leroy</td><td>leroy@edu.com</td><td><span class="pill pill-purple">Physique</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
