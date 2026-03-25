@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% from "macros/_ui.html" import form_input %}
+{% block title %}Ajouter un Enseignant{% endblock %}
 {% block content %}
   <h2>Ajouter un enseignant</h2>
   <a href="{{ url_for('teachers.list_teachers') }}" class="btn btn-secondary mb-3">← Retour à la liste</a>
@@ -16,6 +18,9 @@
       <label for="speciality" class="form-label">Spécialité :</label>
       <input type="text" class="form-control" id="speciality" name="speciality" required>
     </div>
+    {{ form_input('name', 'Nom', placeholder='Prof Dupont', required=True) }}
+    {{ form_input('email', 'Email', type='email', placeholder='prof@edu.com', required=True) }}
+    {{ form_input('speciality', 'Spécialité', placeholder='Mathématiques', required=True) }}
     <button type="submit" class="btn btn-primary">Ajouter</button>
   </form>
 {% endblock %}

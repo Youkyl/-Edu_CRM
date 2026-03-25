@@ -21,17 +21,55 @@
 				<li class="nav-item">
 					<a class="nav-link" href="{{ url_for('teachers.list_teachers') }}">Enseignants</a>
 				</li>
-
-				{% endif %}
-				{% if session.get('role') == 'admin' %}
-				<li class="nav-item">
-					<a class="nav-link" href="{{ url_for('teachers.list_teachers') }}">Enseignants</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{ url_for('logs.index') }}"> Logs</a>
-				</li>
 				{% endif %}
 				{% if session.get("role") == "student" and session.get("student_id") %}
+<nav class="navbar navbar-expand-lg border-bottom bg-white/90 backdrop-blur">
+	<div class="container">
+		{% set role = session.get('role') %}
+		<a class="navbar-brand fw-semibold" href="{{ url_for('dashboard.index') }}">
+			<span class="text-slate-900">Edu</span><span class="text-sky-600">.CRM</span>
+			{% if role == 'admin' %}
+				<span class="badge text-bg-danger ms-2">Espace Admin</span>
+			{% elif role == 'teacher' %}
+				<span class="badge text-bg-primary ms-2">Espace Enseignant</span>
+			{% elif role == 'student' %}
+				<span class="badge text-bg-success ms-2">Espace Étudiant</span>
+			{% endif %}
+		</a>
+
+		<div class="navbar-collapse" id="mainNavbar">
+			<ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
+				{% if role == 'admin' %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard Admin</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('students.list_students') }}">Gestion Étudiants</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('teachers.list_teachers') }}">Gestion Enseignants</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('courses.list_courses') }}">Gestion Cours</a>
+					</li>
+				{% elif role == 'teacher' %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('dashboard.index') }}">Mon Dashboard</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('students.list_students') }}">Mes Étudiants</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('courses.list_courses') }}">Mes Cours</a>
+					</li>
+				{% elif role == 'student' %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('dashboard.index') }}">Mon Dashboard</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ url_for('courses.list_courses') }}">Mes Cours</a>
+					</li>
+        				{% if session.get("student_id") %}
 				<li class="nav-item">
 					<a class="nav-link"
 						href="{{ url_for('students.personal_infos', student_id=session.get('student_id')) }}">Mon profil</a>
@@ -48,6 +86,14 @@
 				<li class="nav-item">
 					<a class="btn btn-sm btn-outline-danger" href="{{ url_for('auth.logout') }}">Déconnexion</a>
 				</li>
+				{% endif %}
+				{% if session.get('user_id') %}
+					<li class="nav-item">
+						<span class="badge text-bg-light border">{{ session.get('user_id') }} ({{ session.get('role') }})</span>
+					</li>
+					<li class="nav-item">
+						<a class="btn btn-sm btn-outline-danger" href="{{ url_for('auth.logout') }}">Déconnexion</a>
+					</li>
 				{% endif %}
 			</ul>
 		</div>

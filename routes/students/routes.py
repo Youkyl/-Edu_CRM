@@ -4,12 +4,18 @@
 # Gère toutes les routes liées aux étudiants
 # ================================================
 
-from flask import render_template, request, redirect, session, url_for, flash
+
+from flask import render_template, request, redirect, session, url_for, flash,make_response
+import csv
+import io
 from . import students_bp
 from ..auth.decorators import login_required
 from ...services import student_service
 from ...services import teacher_service
 from ...services import course_service
+from ...data import students
+
+
 
 # ------------------------------------------------
 # ROUTE 1 : /students/
@@ -47,9 +53,10 @@ def create_student():
         name  = request.form.get("name",  "").strip()
         email = request.form.get("email", "").strip()
         age   = request.form.get("age",   "").strip()
+        password = request.form.get("password", "").strip()
 
         # --- Validation ---
-        if not name or not email or not age:
+        if not name or not email or not age or not password:
             flash("Tous les champs sont obligatoires.", "danger")
             return render_template("students/create.html")
 
@@ -57,8 +64,17 @@ def create_student():
             flash("L'âge doit être un nombre entier.", "danger")
             return render_template("students/create.html")
 
+        for student in students:
+            if student["email"] == email:
+                flash(f"L'étudiant avec l'email {email} existe déjà.", "danger")
+                return render_template("students/create.html")
+            
+        if len(password) < 4:
+            flash("Le mot de passe étudiant doit contenir au moins 4 caractères.", "danger")
+            return render_template("students/create.html")
+
         # --- On appelle le service pour créer l'étudiant ---
-        student_service.add_student(name, email, age)
+        student_service.add_student(name, email, age, password)
 
         # flash() envoie un message qui survive à la redirection
         flash(f"Étudiant '{name}' ajouté avec succès !", "success")
@@ -94,6 +110,40 @@ def delete_student(student_id):
 
     return redirect(url_for("students.list_students"))
 
+
+@students_bp.route("/update/<int:student_id>", methods=["GET", "POST"])
+@login_required
+def update_student(student_id):
+    if session.get("role") != "admin":
+        return redirect(url_for("dashboard.index"))
+
+    student = student_service.get_student_by_id(student_id)
+    if student is None:
+        flash(f"Étudiant introuvable (ID: {student_id}).", "warning")
+        return redirect(url_for("students.list_students"))
+
+    if request.method == "POST":
+        name  = request.form.get("name",  "").strip()
+        email = request.form.get("email", "").strip()
+        age   = request.form.get("age",   "").strip()
+
+        if not name or not email or not age:
+            flash("Tous les champs sont obligatoires.", "danger")
+            return render_template("students/edit.html", student=student)
+
+        if not age.isdigit():
+            flash("L'âge doit être un nombre entier.", "danger")
+            return render_template("students/edit.html", student=student)
+
+        updated = student_service.update_student(student_id, name=name, email=email, age=age)
+        if updated:
+            flash(f"Étudiant '{updated['name']}' mis à jour avec succès.", "success")
+        else:
+            flash("Erreur lors de la mise à jour.", "danger")
+        return redirect(url_for("students.list_students"))
+
+    return render_template("students/edit.html", student=student)
+
 # ------------------------------------------------
 # ROUTE 4 : /students/<id>
 #
@@ -122,3 +172,29 @@ def personal_infos(student_id):
     list_teachers = course_service.get_teachers_for_student(student_id=student_id)
     
     return render_template("students/info.html",student=student, list_courses=list_courses, list_teachers=list_teachers)
+
+
+@students_bp.route("/export")
+@login_required
+def export_students():
+    if session.get("role") != "admin":
+        return redirect(url_for("dashboard.index"))
+
+    all_students = student_service.list_students()
+
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=["id", "name", "email", "age"])
+    writer.writeheader()
+    for student in all_students:
+        writer.writerow({
+            "id":    student["id"],
+            "name":  student["name"],
+            "email": student["email"],
+            "age":   student["age"],
+        })
+
+    response = make_response(output.getvalue())
+    response.headers["Content-Type"] = "text/csv; charset=utf-8"
+    response.headers["Content-Disposition"] = "attachment; filename=students.csv"
+    return response
+

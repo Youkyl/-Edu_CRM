@@ -93,6 +93,7 @@ def list_teachers() -> list[dict]:
 def get_teacher_by_id(teacher_id: int) -> dict | None:
     return next((t for t in teachers if t["id"] == teacher_id), None)
 
+
 def delete_teacher(teacher_id: int) -> bool:
     teacher = get_teacher_by_id(teacher_id)
     if teacher:

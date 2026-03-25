@@ -12,6 +12,7 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "dev-secret-key"
 
+    app.register_blueprint(dashboard_bp, url_prefix="/")
     app.register_blueprint(dashboard_bp, url_prefix="/dashboard")
     app.register_blueprint(students_bp)
     app.register_blueprint(teachers_bp)

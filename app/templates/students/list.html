@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Liste des Etudiants{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h1>Gestion des Etudiants</h1>
+</div>
+
+<input type="text" id="searchInput" placeholder="Rechercher un étudiant..." class="form-control"
+    style="margin-bottom: 20px; width: 100%; padding: 8px;">
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody id="studentsTableBody">
+        {% include 'students/_rows.html' %}
+    </tbody>
+</table>
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const query = this.value;
+        fetch(`{{ url_for('students.search') }}?q=${encodeURIComponent(query)}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('studentsTableBody').innerHTML = html;
+            });
+    });
+</script>
+{% endblock %}

@@ -3,6 +3,17 @@
 endblock %} {% block content %}
 <div class="container mt-4">
   <div class="row justify-content-center">
+    {%if error != null %}
+    <div style="color: red; justify-content: center">{{error}}</div>
+    {% endif %}
+    <div class="col-md-6">
+      <h2 class="mb-4">Ajouter un étudiant</h2>
+{% extends "base.html" %}
+{% from "macros/_ui.html" import form_input %}
+{% block title %}Ajouter un Étudiant — Edu.CRM{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <div class="row justify-content-center">
     <div class="col-md-6">
       <h2 class="mb-4"> Ajouter un étudiant</h2>
 
@@ -10,6 +21,7 @@ endblock %} {% block content %}
                 method="POST" → envoie les données à la route create_student
                 action        → url_for génère /students/create
             -->
+
       <form method="POST" action="{{ url_for('students.create_student') }}">
         <div class="mb-3">
           <label for="name" class="form-label fw-bold">Nom complet</label>
@@ -50,6 +62,14 @@ endblock %} {% block content %}
         </div>
 
         <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-success">Enregistrer</button>
+      <form method="POST" action="{{ url_for('students.create_student') }}">
+        {{ form_input('name', 'Nom complet', placeholder='Ex : Marie Curie', required=True) }}
+        {{ form_input('email', 'Email', type='email', placeholder='Ex : marie@edu.com', required=True) }}
+        {{ form_input('age', 'Âge', type='number', placeholder='Ex : 20', min=1, max=99, required=True) }}
+        {{ form_input('password', 'Mot de passe étudiant', type='password', placeholder='Minimum 4 caractères', required=True) }}
+
+        <div class="d-flex gap-2">
           <button type="submit" class="btn btn-success"> Enregistrer</button>
           <a
             href="{{ url_for('students.list_students') }}"
@@ -62,4 +82,4 @@ endblock %} {% block content %}
     </div>
   </div>
 </div>
-{% endblock %} 
+{% endblock %}

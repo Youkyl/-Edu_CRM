@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% from "macros/_ui.html" import form_input %}
 
 {% block title %}Connexion — Edu.CRM{% endblock %}
 
@@ -20,13 +21,15 @@
             <label class="form-label" for="password">Mot de passe</label>
             <input type="password" class="form-control" id="password" name="password" required />
           </div>
+          {{ form_input('username', "Nom d'utilisateur", required=True) }}
+          {{ form_input('password', 'Mot de passe', type='password', required=True) }}
           <div class="d-grid">
             <button type="submit" class="btn btn-primary">Se connecter</button>
           </div>
         </form>
         <hr>
         <small class="text-body-secondary d-block">
-          Comptes test: etudiant/1234, prof/1234, admin/1234
+          Comptes test: admin/1234, prof/1234, Alice Dupont/alice123, Bob Martin/bob123
         </small>
       </div>
     </div>

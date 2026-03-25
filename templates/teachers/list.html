@@ -9,6 +9,30 @@
     <div class="table-wrap">
       <table class="table table-striped mb-0">
         <thead>
+{% block title %}Liste des Enseignants{% endblock %}
+{% block content %}
+  <div class="rounded-4 border border-emerald-200 bg-emerald-600 text-white p-4 shadow-sm mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <h2 class="h4 mb-0 fw-bold">Liste des enseignants</h2>
+      <a href="{{ url_for('teachers.create_teacher') }}" class="btn btn-light text-emerald-700 fw-semibold border-0">Ajouter un enseignant</a>
+    </div>
+  </div>
+
+  {% if teachers %}
+    <div class="mb-3">
+      <input
+        type="text"
+        class="form-control form-control-lg border-emerald-200"
+        placeholder="Rechercher un enseignant, email, spécialité..."
+        data-table-search="teachers-table-body"
+      />
+    </div>
+
+    <p class="text-danger small" data-search-empty="teachers-table-body" hidden>Aucun résultat pour cette recherche.</p>
+
+    <div class="table-wrap shadow-sm border-emerald-100">
+      <table class="table table-striped mb-0 table-hover">
+        <thead class="bg-emerald-50">
           <tr>
             <th>ID</th>
             <th>Nom</th>
@@ -17,9 +41,9 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="teachers-table-body">
           {% for t in teachers %}
-          <tr>
+          <tr data-search-row>
             <td>{{ t.id }}</td>
             <td>{{ t.name }}</td>
             <td>{{ t.email }}</td>
