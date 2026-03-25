@@ -1,0 +1,40 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Dashboard — Edu.CRM{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+	<h1 class="text-3xl font-bold text-slate-900 mb-2">Tableau de bord</h1>
+	{% if role == 'admin' %}
+	<p class="text-slate-600">Vue d'ensemble globale de la plateforme.</p>
+	{% elif role == 'teacher' %}
+	<p class="text-slate-600">Vue de vos cours et des étudiants inscrits.</p>
+	{% elif role == 'student' %}
+	<p class="text-slate-600">Vue de vos cours et enseignants.</p>
+	{% endif %}
+</div>
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+	<!-- Étudiants Card -->
+	<div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+		<p class="text-blue-100 text-xs font-semibold uppercase tracking-widest mb-2">Étudiants</p>
+		<p class="text-5xl font-bold">{{ nb_students }}</p>
+	</div>
+
+	<!-- Enseignants Card (admin & teacher) -->
+	{% if role != 'student' %}
+	<div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl shadow-lg p-6 text-white">
+		<p class="text-emerald-100 text-xs font-semibold uppercase tracking-widest mb-2">Enseignants</p>
+		<p class="text-5xl font-bold">{{ nb_teachers }}</p>
+	</div>
+	{% endif %}
+
+	<!-- Cours Card  -->
+	<div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+		<p class="text-purple-100 text-xs font-semibold uppercase tracking-widest mb-2">Cours</p>
+		<p class="text-5xl font-bold">{{ nb_courses }}</p>
+	</div>
+</div>
+{% endblock %}

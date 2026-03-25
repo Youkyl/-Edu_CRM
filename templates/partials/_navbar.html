@@ -1,0 +1,74 @@
+﻿{% set role = session.get('role') %}
+<nav class="bg-white border-b border-slate-200 shadow-sm">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+		<div class="flex justify-between items-center h-16">
+			<!-- Logo/Brand -->
+			<a href="{{ url_for('dashboard.index') }}" class="flex items-center space-x-2">
+				<span class="text-xl font-bold text-blue-600">Edu.CRM</span>
+			</a>
+
+			<!-- Navigation Links -->
+			<div class="hidden md:flex items-center space-x-1">
+				<!-- Dashboard (tous les rôles) -->
+				<a href="{{ url_for('dashboard.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+					Dashboard
+				</a>
+
+				<!-- Étudiants (admin et teacher) -->
+				{% if role in ['admin', 'teacher'] %}
+				<a href="{{ url_for('students.list_students') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+					Étudiants
+				</a>
+				{% endif %}
+
+				<!-- Enseignants (admin seulement) -->
+				{% if role == 'admin' %}
+				<a href="{{ url_for('teachers.list_teachers') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+					Enseignants
+				</a>
+				{% endif %}
+
+				<!-- Cours -->
+				{% if role == 'admin' %}
+				<a href="{{ url_for('courses.list_courses') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+					Cours
+				</a>
+				{% elif role == 'teacher' %}
+				<a href="{{ url_for('courses.list_courses') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+					Mes Cours
+				</a>
+				{% elif role == 'student' %}
+				<a href="{{ url_for('courses.list_courses') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+					Mes Cours
+				</a>
+				{% endif %}
+
+				<!-- Mon profil (student) -->
+				{% if role == 'student' %}
+				<a href="{{ url_for('students.personal_infos', student_id=session.get('student_id')) }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+					Mon profil
+				</a>
+				{% endif %}
+
+				<!-- Logs (admin) -->
+				{% if role == 'admin' %}
+				<a href="{{ url_for('logs.index') }}" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-100 transition">
+					Logs
+				</a>
+				{% endif %}
+			</div>
+
+			<!-- Right side: User info + Logout -->
+			<div class="flex items-center space-x-4">
+				{% if session.get('user_id') %}
+				<span class="text-sm text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+					{{ session.get('user_id') }} <span class="font-semibold text-slate-700">{{ role }}</span>
+				</span>
+				<a href="{{ url_for('auth.logout') }}" class="px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 transition">
+					Déconnexion
+				</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</nav>

@@ -1,0 +1,30 @@
+﻿{% extends "base.html" %}
+{% from "macros/_ui.html" import form_input %}
+
+{% block title %}Ajouter un Enseignant — Edu.CRM{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+  <div class="bg-white rounded-xl shadow-lg p-8">
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-slate-900 mb-2">Ajouter un enseignant</h2>
+      <p class="text-slate-600">Remplissez le formulaire ci-dessous pour créer un nouvel enseignant.</p>
+    </div>
+
+    <form method="POST" class="space-y-6">
+      {{ form_input('name', 'Nom', placeholder='Prof Dupont', required=True) }}
+      {{ form_input('email', 'Email', type='email', placeholder='prof@edu.com', required=True) }}
+      {{ form_input('speciality', 'Spécialité', placeholder='Mathématiques', required=True) }}
+      
+      <div class="flex gap-3 pt-4">
+        <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition duration-200">
+          ✓ Ajouter
+        </button>
+        <a href="{{ url_for('teachers.list_teachers') }}" class="flex-1 bg-slate-300 hover:bg-slate-400 text-slate-900 font-semibold py-3 rounded-lg text-center transition duration-200">
+          Annuler
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

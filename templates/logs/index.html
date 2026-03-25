@@ -1,0 +1,61 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Journal d'activité — Edu.CRM{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="flex justify-between items-center mb-6">
+  <div>
+    <h2 class="text-2xl font-bold text-slate-900">Journal d'activité</h2>
+    <p class="text-slate-600 text-sm mt-1">Historique complèt aides actions effectuées sur la plateforme.</p>
+  </div>
+  <a href="{{ url_for('logs.clear') }}"
+     class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold transition"
+     onclick="return confirm('Effacer tout le journal ?')">
+     Effacer le journal
+  </a>
+</div>
+
+<!-- Table -->
+{% if logs %}
+<div class="overflow-x-auto shadow-lg rounded-xl">
+  <table class="w-full border-collapse">
+    <thead>
+      <tr class="bg-slate-100 border-b border-slate-200">
+        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">ID</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">Date / Heure</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">Utilisateur</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">Action</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-slate-700">Cible</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for log in logs %}
+      <tr class="border-b border-slate-200 hover:bg-slate-50 transition">
+        <td class="px-6 py-4 text-sm text-slate-700">{{ log.id }}</td>
+        <td class="px-6 py-4 text-sm text-slate-600">{{ log.timestamp }}</td>
+        <td class="px-6 py-4 text-sm font-medium text-slate-900">{{ log.user }}</td>
+        <td class="px-6 py-4 text-sm">
+          {% if "ADD" in log.action %}
+            <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-full">{{ log.action }}</span>
+          {% elif "DELETE" in log.action %}
+            <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">{{ log.action }}</span>
+          {% elif "UPDATE" in log.action %}
+            <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full">{{ log.action }}</span>
+          {% else %}
+            <span class="inline-block px-3 py-1 bg-slate-100 text-slate-800 text-xs font-semibold rounded-full">{{ log.action }}</span>
+          {% endif %}
+        </td>
+        <td class="px-6 py-4 text-sm text-slate-600">{{ log.target }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="bg-blue-50 border border-blue-200 text-blue-800 p-6 rounded-xl text-center">
+  <p class="text-lg font-semibold">Aucune activité enregistrée</p>
+  <p class="text-sm mt-2">Les actions effectuées sur la plateforme apparaîtront ici.</p>
+</div>
+{% endif %}
+{% endblock %}

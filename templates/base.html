@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>{% block title %}Edu.CRM{% endblock %}</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-900 font-sans">
+	{% if request.endpoint != 'auth.login' %}
+	{% include 'partials/_navbar.html' %}
+	{% endif %}
+
+	<main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+		{% for category, message in messages %}
+		<div class="mb-4 p-4 rounded-lg {% if category == 'success' %}bg-emerald-50 border border-emerald-200 text-emerald-800{% elif category == 'danger' %}bg-red-50 border border-red-200 text-red-800{% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %}">
+			<div class="flex justify-between items-center">
+				<p>{{ message }}</p>
+				<button onclick="this.parentElement.parentElement.style.display='none'" class="text-lg font-bold">&times;</button>
+			</div>
+		</div>
+		{% endfor %}
+		{% endif %}
+		{% endwith %}
+
+		{% block content %}{% endblock %}
+	</main>
+
+	<script>
+		document.querySelectorAll('[data-table-search]').forEach((input) => {
+			const tableId = input.getAttribute('data-table-search');
+			const tableBody = document.getElementById(tableId);
+			if (!tableBody) return;
+
+			const rows = Array.from(tableBody.querySelectorAll('[data-search-row]'));
+			const emptyState = document.querySelector('[data-search-empty="' + tableId + '"]');
+
+			const runSearch = () => {
+				const query = input.value.trim().toLowerCase();
+				let visibleCount = 0;
+
+				rows.forEach((row) => {
+					const text = row.innerText.toLowerCase();
+					const isVisible = query === '' || text.includes(query);
+					row.style.display = isVisible ? '' : 'none';
+					if (isVisible) visibleCount += 1;
+				});
+
+				if (emptyState) {
+					emptyState.hidden = query === '' || visibleCount > 0;
+				}
+			};
+
+			input.addEventListener('input', runSearch);
+		});
+	</script>
+</body>
+
+</html>
